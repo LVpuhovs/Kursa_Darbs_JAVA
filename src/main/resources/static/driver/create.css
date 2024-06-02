@@ -1,0 +1,103 @@
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+
+form {
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+
+.table-container {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 10px solid #ddd;
+    overflow-x: auto;
+}
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+
+.table th {
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+}
+
+
+.table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 14px;
+}
+
+tr {
+    background-color: #f9f9f9;
+    color: #000000;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+
+.form-container {
+    width: 80%;
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input-group input[type="text"] {
+    width: calc(100% - 10px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+
+

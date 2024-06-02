@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Drivers</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <style>
+        table {
+            width: 85%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            border: 1px solid #ddd;
+            margin: 20px auto;
+        }
+
+
+        th {
+            background-color: #000000;
+            color: white;
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+
+        td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            font-size: 14px;
+        }
+    </style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/driver/all">Drivers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/teams/all">Teams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/standings/all">Standings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/driver/create">Create Driver</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<h1 th:text="${title}"></h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="tempPr: ${mylist}">
+            <td th:text="${tempPr.getIdD()}"></td>
+            <td th:text="${tempPr.getName()}"></td>
+            <td th:text="${tempPr.getSurname()}"></td>
+            <td th:text="${tempPr.getNumber()}"></td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
