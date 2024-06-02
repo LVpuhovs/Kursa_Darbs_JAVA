@@ -30,6 +30,22 @@
             padding: 5px;
             font-size: 14px;
         }
+        a.table-link {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+        a.table-link:hover {
+            color: darkred;
+        }
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -70,10 +86,15 @@
     </thead>
     <tbody>
         <tr th:each="tempPr: ${mylist}">
-            <td th:text="${tempPr.getIdD()}"></td>
-            <td th:text="${tempPr.getName()}"></td>
-            <td th:text="${tempPr.getSurname()}"></td>
-            <td th:text="${tempPr.getNumber()}"></td>
+            <td><a th:href="@{/driver/update/{id}(id=${tempPr.idD})}" class="table-link" th:text="${tempPr.idD}"></a></td>
+            <td><a th:href="@{/driver/update/{id}(id=${tempPr.idD})}" class="table-link" th:text="${tempPr.name}"></a></td>
+            <td><a th:href="@{/driver/update/{id}(id=${tempPr.idD})}" class="table-link" th:text="${tempPr.surname}"></a></td>
+            <td><a th:href="@{/driver/update/{id}(id=${tempPr.idD})}" class="table-link" th:text="${tempPr.number}"></a></td>
+            <td>
+                <form th:action="@{/driver/delete/{id}(id=${tempPr.idD})}">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+            </td>
         </tr>
     </tbody>
 </table>

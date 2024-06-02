@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -46,6 +44,46 @@ public class DriverCRUDController {
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage());
             return "error-page";
+        }
+    }
+
+    @GetMapping("/update/{id}") //localhost:8080/driver/update?id=1
+    public String getDriverUpateById(@PathVariable("id") int id, Model model ) {
+        Driver driver = null;
+        try {
+            driver = crudService.getDriverById(id);
+            model.addAttribute("id", id);
+            model.addAttribute("name", driver.getName());
+            model.addAttribute("driver", driver);
+            return "update-driver-page";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    @PostMapping("/update/{id}")
+    public String postdriverUpdate(@PathVariable("id") int id, @Valid Driver driver, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "update-driver-page";
+        }else {
+            try {
+                crudService.updateDriverById(id, driver);
+                return "redirect:/driver/all";
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @GetMapping("/delete/{id}") //localhost:8080/product/delete/1
+    public String getProductDeleteById(@PathVariable("id") int id, Model model) {
+
+        try {
+            crudService.deleteDriverById(id);
+            model.addAttribute("mylist", crudService.getAllDrivers());
+            return "show-driver-all-page";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

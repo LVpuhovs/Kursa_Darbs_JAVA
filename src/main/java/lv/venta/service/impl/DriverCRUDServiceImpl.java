@@ -36,12 +36,19 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
 
     @Override
     public void updateDriverById(int id, Driver driver) throws Exception {
-
+        Driver existingDriver = getDriverById(id);
+        if (existingDriver == null) throw new Exception("Driver not found");
+        existingDriver.setSurname(driver.getSurname());
+        existingDriver.setNumber(driver.getNumber());
+        driverRepo.save(existingDriver);
     }
 
     @Override
     public Driver deleteDriverById(int id) throws Exception {
-        return null;
+        Driver existingDriver = getDriverById(id);
+        if (existingDriver == null) throw new Exception("Driver not found");
+        driverRepo.delete(existingDriver);
+        return existingDriver;
     }
 
     @Override
@@ -51,16 +58,15 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
 
     @Override
     public Driver getDriverById(int id) throws Exception {
-        return null;
+        return driverRepo.findById(id).get();
     }
 
     @Override
     public Driver getDriverBySurname(String surname) throws Exception {
-        return null;
+        Driver existingDriver = driverRepo.findBySurname(surname);
+        if (existingDriver == null) throw new Exception("Driver not found");
+
+        return existingDriver;
     }
 
-    @Override
-    public ArrayList<Driver> getTeamDrivers() throws Exception {
-        return null;
-    }
 }

@@ -1,8 +1,8 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Drivers</title>
+    <title>Update Driver</title>
     <link rel="stylesheet" type="text/css" href="/driver/create.css">
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <style>
@@ -52,34 +52,33 @@
         </ul>
     </div>
 </nav>
+<form action="#" th:action="@{/driver/update/{id}(id=${id})}" th:object="${driver}" method="post">
+    <input type="hidden" th:field="*{idD}" />
+    <table>
+        <thead>
+            <td colspan="3"><h2>Update Driver</h2></td>
 
-    <form action="#" th:action="@{/driver/create}" th:object="${driver}" th:method="post">
-        <table>
-            <thead>
-                <td colspan="3"><h2>Create Driver</h2></td>
-            </thead>
-            <tbody>
-                </tr>
-                    <td>Name</td>
-                    <td><input type="text" th:field="*{name}" /></td>
-                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></td>
-                </tr>
-                <tr>
-                    <td>Surname</td>
-                    <td><input type="text" th:field="*{surname}" /></td>
-                    <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></td>
-                </tr>
-                <tr>
-                    <td>Number</td>
-                    <td><input type="number" th:field="*{number}" /></td>
-                    <td th:if="${#fields.hasErrors('number')}" th:errors="*{number}"></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><input type="submit" value="Submit" /></td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-</div>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td th:text="*{name}"></td>
+            </tr>
+            <tr>
+                <td>Surname</td>
+                <td><input type="text" th:field="*{surname}" /></td>
+                <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></td>
+            </tr>
+            <tr>
+                <td>Number</td>
+                <td><input type="number" th:field="*{number}" /></td>
+                <td th:if="${#fields.hasErrors('number')}" th:errors="*{number}"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Submit" /></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
 </body>
 </html>

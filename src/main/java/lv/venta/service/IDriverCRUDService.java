@@ -17,5 +17,4 @@ public interface IDriverCRUDService {
 
     public abstract Driver getDriverBySurname(String surname) throws Exception;
 
-    public abstract ArrayList<Driver> getTeamDrivers() throws Exception;
 }
