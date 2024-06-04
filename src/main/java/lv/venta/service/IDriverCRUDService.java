@@ -9,7 +9,7 @@ public interface IDriverCRUDService {
 
     public abstract void updateDriverById(int id, Driver driver) throws Exception;
 
-    public abstract Driver deleteDriverById(int id) throws Exception;
+    public abstract void deleteDriverById(int id) throws Exception;
 
     public abstract ArrayList<Driver> getAllDrivers();
 

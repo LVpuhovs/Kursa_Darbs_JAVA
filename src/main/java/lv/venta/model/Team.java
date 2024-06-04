@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
@@ -14,7 +13,7 @@ import java.util.Collection;
 @ToString
 @Table(name = "TeamTable")
 @Entity
-public class Team {
+public class Team{
 
     @Setter(AccessLevel.NONE)
     @Id
@@ -28,12 +27,17 @@ public class Team {
     @Column(name = "TeamName")
     private String teamName;
 
-    @ManyToOne
-    @JoinColumn(name = "idD")
-    private Driver drivers;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "driver1_id", referencedColumnName = "IdD")
+    private Driver driver1;
 
-    public Team(String teamName, Driver drivers) {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "driver2_id", referencedColumnName = "IdD")
+    private Driver driver2;
+
+    public Team(String teamName, Driver driver1, Driver driver2) {
         setTeamName(teamName);
-        setDrivers(drivers);
+        setDriver1(driver1);
+        setDriver2(driver2);
     }
 }

@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.util.Collection;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "DriverTable")
+@Table(name = "DriversTable")
 @Entity
 public class Driver {
 
@@ -38,14 +38,16 @@ public class Driver {
     @Column(name = "DriverNumber")
     private int number;
 
-    @OneToMany(mappedBy = "drivers",cascade = CascadeType.ALL)
+    @ManyToOne
     @ToString.Exclude
-    private Collection<Team> team;
+    @JoinColumn(name = "idT")
+    private Team team;
 
 
     public Driver(String name, String surname, int number){
         setName(name);
         setSurname(surname);
         setNumber(number);
+
     }
 }

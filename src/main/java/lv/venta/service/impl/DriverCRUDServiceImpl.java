@@ -26,7 +26,7 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
         if (existingDriver != null) {
             throw new Exception(driver.getName() + " " + driver.getSurname() + " is already registered");
         }
-        Team team = teamRepo.findByDriversNumber(driver.getNumber());
+        Team team = teamRepo.findByDriver1NumberAndDriver2Number(driver.getNumber(), driver.getNumber());
         if(team != null) throw new Exception("Driver " + driver.getName() + " is already registered");
 
         Driver newDriver = new Driver(driver.getName(), driver.getSurname(), driver.getNumber());
@@ -44,11 +44,10 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
     }
 
     @Override
-    public Driver deleteDriverById(int id) throws Exception {
+    public void deleteDriverById(int id) throws Exception {
         Driver existingDriver = getDriverById(id);
         if (existingDriver == null) throw new Exception("Driver not found");
         driverRepo.delete(existingDriver);
-        return existingDriver;
     }
 
     @Override

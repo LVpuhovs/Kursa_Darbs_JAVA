@@ -75,13 +75,13 @@ public class DriverCRUDController {
         }
     }
 
-    @GetMapping("/delete/{id}") //localhost:8080/product/delete/1
+    @GetMapping("/delete/{id}") //localhost:8080/driver/delete/1
     public String getProductDeleteById(@PathVariable("id") int id, Model model) {
 
         try {
             crudService.deleteDriverById(id);
             model.addAttribute("mylist", crudService.getAllDrivers());
-            return "show-driver-all-page";
+            return "redirect:/driver/all";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
