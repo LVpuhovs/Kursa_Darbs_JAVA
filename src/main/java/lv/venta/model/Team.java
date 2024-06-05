@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
@@ -34,6 +35,9 @@ public class Team{
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "driver2_id", referencedColumnName = "IdD")
     private Driver driver2;
+
+    @OneToMany(mappedBy = "team")
+    private Collection<TeamStandings> teamStandings = new ArrayList<TeamStandings>();
 
     public Team(String teamName, Driver driver1, Driver driver2) {
         setTeamName(teamName);

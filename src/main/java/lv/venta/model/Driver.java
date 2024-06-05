@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 @Getter
@@ -43,6 +45,8 @@ public class Driver {
     @ToString.Exclude
     private Team team;
 
+    @OneToMany(mappedBy = "driver")
+    private Collection<DriverStandings> driverStandings = new ArrayList<DriverStandings>();
 
     public Driver(String name, String surname, int number){
         setName(name);
