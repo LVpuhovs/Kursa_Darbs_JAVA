@@ -23,7 +23,7 @@ public class DriverCRUDController {
     }
 
     @PostMapping("/create")
-    public String postDriverCreate(@Valid Driver driver, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String postDriverCreate(@Valid Driver driver, BindingResult result) {
         if (result.hasErrors()) {
             return "create-driver-page";
         } else {

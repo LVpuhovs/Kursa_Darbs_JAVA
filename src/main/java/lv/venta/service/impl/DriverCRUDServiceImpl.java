@@ -68,4 +68,9 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
         return existingDriver;
     }
 
+    @Override
+    public ArrayList<Driver> getAvailableDrivers(){
+        return driverRepo.findAvailableDrivers();
+    }
+
 }

@@ -22,7 +22,7 @@ public class Team{
     private int idT;
 
     @NonNull
-    @Pattern(regexp = "[A-Z][a-z ]+", message = "Only letters and space")
+    @Pattern(regexp = "^[A-Z][a-zA-Z ]{2,19}$", message = "Only letters and space")
     @Size(min = 3, max = 20)
     @Column(name = "TeamName")
     private String teamName;
@@ -39,5 +39,19 @@ public class Team{
         setTeamName(teamName);
         setDriver1(driver1);
         setDriver2(driver2);
+    }
+
+    public void setDriver1(Driver driver1) {
+        this.driver1 = driver1;
+        if (driver1 != null) {
+            driver1.setTeam(this);
+        }
+    }
+
+    public void setDriver2(Driver driver2) {
+        this.driver2 = driver2;
+        if (driver2 != null) {
+            driver2.setTeam(this);
+        }
     }
 }

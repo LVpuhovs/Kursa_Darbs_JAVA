@@ -39,8 +39,8 @@ public class Driver {
     private int number;
 
     @ManyToOne
-    @ToString.Exclude
     @JoinColumn(name = "idT")
+    @ToString.Exclude
     private Team team;
 
 
@@ -48,6 +48,5 @@ public class Driver {
         setName(name);
         setSurname(surname);
         setNumber(number);
-
     }
 }

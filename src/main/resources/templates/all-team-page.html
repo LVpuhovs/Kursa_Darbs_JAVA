@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Show Drivers</title>
+    <title>Show Teams</title>
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <style>
         table {
@@ -45,6 +45,14 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .update-button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -73,6 +81,7 @@
 </nav>
 
 <h1 th:text="${title}"></h1>
+<a href="/team/add" class="table-link">Create Team</a>
 <table>
     <thead>
     <tr>
@@ -90,7 +99,19 @@
         <td th:text="${team.driver2 != null ? team.driver2.name : 'N/A'}"></td>
         <td th:text="${team.driver2 != null ? team.driver2.surname : 'N/A'}"></td>
         <td th:text="${team.driver2 != null ? team.driver2.number : 'N/A'}"></td>
+        <td>
+            <form th:action="@{/team/update/{id}(id=${team.idT})}">
+                <button type="submit" class="update-button">Update</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/team/delete/{id}(id=${team.idT})}">
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
+        </td>
+
     </tr>
+
     </tbody>
 </table>
 </body>
