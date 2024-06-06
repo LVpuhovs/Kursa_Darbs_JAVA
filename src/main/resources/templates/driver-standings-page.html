@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Driver Standings</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <style>
+    table {
+      width: 85%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      border: 1px solid #ddd;
+      margin: 20px auto;
+    }
+
+
+    th {
+      background-color: #000000;
+      color: white;
+      border: 1px solid #ddd;
+      padding: 5px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+
+    td {
+      border: 1px solid #ddd;
+      padding: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/driver/all">Drivers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/team/all">Teams</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/standings/all">Standings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/driver/create">Create Driver</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<h1>Driver Standings</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Position</th>
+    <th>Driver</th>
+    <th th:each="race, iterStat : ${#numbers.sequence(1, numberOfRaces)}">
+      <a th:href="@{/standings/driver/update/{id}(id=${iterStat.index + 1})}" class="table-link" th:text="${'Race ' + race}"></a>
+    </th>
+    <th>Points</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="driver, index : ${drivers}">
+    <td th:text="${index.index + 1}"></td>
+    <td th:text="${driver.name + ' ' +  driver.surname + ' ' + driver.number}"></td>
+    <td>
+        <span th:each="standing : ${mylist}"
+          th:if="${standing.driver.idD == driver.idDS}"
+          th:text="${standing.points}">
+        </span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

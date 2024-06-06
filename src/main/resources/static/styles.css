@@ -110,7 +110,3 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #8b0000;
 }
-.logo {
-    height: 35px;
-    width: auto;
-}

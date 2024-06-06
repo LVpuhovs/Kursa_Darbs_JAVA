@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Standings</title>
+    <link rel="stylesheet" type="text/css" href="/driver/create.css">
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <style>
+        table {
+            width: 85%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            border: 1px solid #ddd;
+            margin: 20px auto;
+        }
+
+        th {
+            background-color: #000000;
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/driver/all">Drivers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/team/all">Teams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/standings/all">Standings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/driver/create">Create Driver</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<h1>Update Driver Standings</h1>
+<form action="#" th:action="@{/standings/driver/update/{id}(id=${driverStandings.idDS})}" method="post" th:object="${driverStandings}">
+    <input type="hidden" name="id" th:value="${driverStandings.idDS}">
+    <table>
+        <thead>
+        <tr>
+            <th>Race Number</th>
+            <th>Position</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="raceResult, idx : ${driverStandings.raceResults}">
+            <td th:text="${idx.index + 1}"></td>
+            <td><input type="text" th:field="*{raceResults[__${idx.index}__]}"/></td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="submit">Update</button>
+</form>
+</body>
+</html>
