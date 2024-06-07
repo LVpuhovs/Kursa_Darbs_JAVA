@@ -11,7 +11,7 @@ public interface IDriverCRUDService {
 
     public abstract void deleteDriverById(int id) throws Exception;
 
-    public abstract ArrayList<Driver> getAllDrivers();
+    public abstract ArrayList<Driver> getAllDrivers() throws Exception;
 
     public abstract Driver getDriverById(int id) throws Exception;
 

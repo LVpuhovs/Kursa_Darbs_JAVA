@@ -40,15 +40,26 @@ public class StandingsController {
         int numberOfRaces = 10;
         model.addAttribute("numberOfRaces", numberOfRaces);
         //iziet cauri sarakstam, un filtree tikai tos braucejus kuriem ir komanda un salasa listaa
-        model.addAttribute("drivers", crudService.getAllDrivers().stream().filter(driver -> driver.getTeam() != null).collect(Collectors.toList()));
-        model.addAttribute("mylist", driverStandingsService.getAllDriverStandings());
-        return "driver-standings-page";
+        try {
+			model.addAttribute("drivers", crudService.getAllDrivers().stream().filter(driver -> driver.getTeam() != null).collect(Collectors.toList()));
+			model.addAttribute("mylist", driverStandingsService.getAllDriverStandings());
+	        return "driver-standings-page"; 
+        } catch (Exception e) {
+            model.addAttribute("msg", e.getMessage());
+            return "error-page";
+        }
+        
     }
 
     @GetMapping("/team/all")
     public String getTeamStandingsAll(Model model) {
-        model.addAttribute("mylist", teamStandingsService.getAllTeamStandings());
-        return "team-standings-page";
+        try {
+        	model.addAttribute("mylist", teamStandingsService.getAllTeamStandings());
+            return "team-standings-page";
+        } catch (Exception e) {
+            model.addAttribute("msg", e.getMessage());
+            return "error-page";
+        }
     }
 
     @GetMapping("/driver/update/{id}")
@@ -57,7 +68,8 @@ public class StandingsController {
             model.addAttribute("driverStandings", driverStandingsService.getDriverStandingsById(id));
             return "update-driver-standings-page";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            model.addAttribute("msg", e.getMessage());
+            return "error-page";
         }
 
     }
@@ -71,7 +83,7 @@ public class StandingsController {
                 driverStandingsService.updateDriverStanding(id, updatedDriverStandings);
                 return "redirect:/standings/driver/all";
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                return "error-page";
             }
         }
     }

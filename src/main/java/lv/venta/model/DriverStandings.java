@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -27,8 +27,8 @@ public class DriverStandings {
     private Driver driver;
 
     @Min(0)
-    @Column(name = "Points")
-    private int points;
+    @Column(name = "PointsPerRace")
+    private int pointsPerRace;
 
     @Min(0)
     @Column(name = "Wins")
@@ -40,33 +40,32 @@ public class DriverStandings {
 
     @Min(0)
     @ElementCollection
-    private ArrayList<Integer> raceResults = new ArrayList<>();
+    private Collection<Integer> raceResults;
 
     @Min(10)
     @Max(24)
     private int numberOfRaces;
 
 
-    public DriverStandings(Driver driver, int numberOfRaces, int points) {
+    public DriverStandings(Driver driver, int numberOfRaces) {
         setDriver(driver);
         setNumberOfRaces(numberOfRaces);
-        setPoints(calculatePoints());
+        calculatePoints();
     }
 
-    public int calculatePoints() {
+    public void calculatePoints() { 				//all the points for 1 driver
         int[] pointsPerPosition = {25, 18, 15, 12, 10, 8, 6, 4, 2, 1};
         int totalPoints = 0;
         int currentWinPosition = 0;
         for (int position : raceResults) {
             if (position <= pointsPerPosition.length) {
                 totalPoints += pointsPerPosition[position - 1];
-                if (position == 1) {
+                
+                if (position == 1)
                     currentWinPosition++;
-                }
             }
         }
-        setPoints(totalPoints);
+        setPointsPerRace(totalPoints);
         setWins(currentWinPosition);
-        return totalPoints;
     }
 }

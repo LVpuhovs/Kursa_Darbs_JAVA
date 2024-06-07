@@ -23,7 +23,7 @@ public class Driver {
     private int idD;
 
     @NonNull
-    @Pattern(regexp = "[A-Z][a-z ]+", message = "Only letters and space")
+    @Pattern(regexp = "[A-Z][a-z ]+", message = "Only letters")
     @Size(min = 3, max = 20)
     @Column(name = "Name")
     private String name;
@@ -46,7 +46,7 @@ public class Driver {
     private Team team;
 
     @OneToMany(mappedBy = "driver")
-    private Collection<DriverStandings> driverStandings = new ArrayList<DriverStandings>();
+    private Collection<DriverStandings> driverStandings;
 
     public Driver(String name, String surname, int number){
         setName(name);

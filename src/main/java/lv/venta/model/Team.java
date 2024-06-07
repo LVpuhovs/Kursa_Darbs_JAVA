@@ -37,7 +37,7 @@ public class Team{
     private Driver driver2;
 
     @OneToMany(mappedBy = "team")
-    private Collection<TeamStandings> teamStandings = new ArrayList<TeamStandings>();
+    private Collection<TeamStandings> teamStandings;
 
     public Team(String teamName, Driver driver1, Driver driver2) {
         setTeamName(teamName);

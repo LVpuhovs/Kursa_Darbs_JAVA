@@ -27,53 +27,45 @@ public class TeamServiceImpl implements ITeamService {
 
     @Override
     public Team getTeamById(int id) throws Exception {
+    	if(id < 0) throw new Exception("Wrong Input - Id should be positive!");
         return teamRepo.findById(id).get();
     }
 
     @Override
     public Team addTeam(Team team) throws Exception {
-        if(team == null) throw new Exception("team is null");
+        if(team == null) throw new Exception("Team is null");
+        if(team.getDriver1() == null || team.getDriver2() == null) throw new Exception("Driver can't be null");
+        if(team.getDriver1().equals(team.getDriver2())) throw new Exception("Both drivers can't be the same");
+        
         Team existingTeam = teamRepo.findByTeamName(team.getTeamName());
-        if(existingTeam != null) throw new Exception("team already exists");
-
-        if (team.getDriver1() != null && team.getDriver1().getIdD() == 0) {
-            driverRepo.save(team.getDriver1());
-        }
-        if (team.getDriver2() != null && team.getDriver2().getIdD() == 0) {
-            driverRepo.save(team.getDriver2());
-        }
+        if(existingTeam != null) throw new Exception("Team already exists");
+        
         teamRepo.save(team);
-
-        if (team.getDriver1() != null) {
-            team.getDriver1().setTeam(team);
-            driverRepo.save(team.getDriver1());
-        }
-        if (team.getDriver2() != null) {
-            team.getDriver2().setTeam(team);
-            driverRepo.save(team.getDriver2());
-        }
+        
+        team.getDriver1().setTeam(team);
+        driverRepo.save(team.getDriver1());
+        team.getDriver2().setTeam(team);
+        driverRepo.save(team.getDriver2());
 
         return team;
     }
 
     @Override
     public void updateTeam(int id, Team team) throws Exception {
+    	if(team == null) throw new Exception("Team is null");
+    	
         Team existingTeam = getTeamById(id);
-        if (existingTeam == null) throw new Exception("team not found");
+        if (existingTeam == null) throw new Exception("Team not found");
 
         Driver replacedDriver1 = existingTeam.getDriver1();
         Driver replacedDriver2 = existingTeam.getDriver2();
-
         Driver newDriver1 = team.getDriver1();
         Driver newDriver2 = team.getDriver2();
-
-
-        existingTeam.setDriver1(null);
-        existingTeam.setDriver2(null);
-
+        
+        if(newDriver1 != null && newDriver2 != null && newDriver1.equals(newDriver2)) throw new Exception("Both drivers can't be the same");
+        
         existingTeam.setDriver1(newDriver1);
         existingTeam.setDriver2(newDriver2);
-
         existingTeam.setTeamName(team.getTeamName());
 
         teamRepo.save(existingTeam);

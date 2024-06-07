@@ -19,16 +19,16 @@ public class TeamStandingsServiceImpl implements ITeamStandingsService {
 
     @Override
     public TeamStandings getTeamStandingById(int id) throws Exception {
+    	if(id < 0) throw new Exception("Wrong Input - Id should be positive!");
         return teamStandingsRepo.findById(id).get();
     }
 
     @Override
     public TeamStandings addTeamStanding(TeamStandings teamStandings) throws Exception {
         if (teamStandings == null) throw new Exception("Team standings is null");
-
-        if (teamStandings.getPoints() < 0) {
+        if (teamStandings.getPoints() < 0)
             throw new Exception("Points cannot be negative");
-        }
+        
         return teamStandingsRepo.save(teamStandings);
     }
 
