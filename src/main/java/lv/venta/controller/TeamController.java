@@ -48,7 +48,8 @@ public class TeamController {
                 teamService.addTeam(team);
                 return "redirect:/team/all";
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                model.addAttribute("msg", e.getMessage());
+                return "error-page";
             }
         }
     }
@@ -61,7 +62,8 @@ public class TeamController {
             model.addAttribute("availableDrivers", driverService.getAvailableDrivers());
             return "update-team-page";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            model.addAttribute("msg", e.getMessage());
+            return "error-page";
         }
 
     }
@@ -74,7 +76,8 @@ public class TeamController {
                 teamService.updateTeam(id, team);
                 return "redirect:/team/all";
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                model.addAttribute("msg", e.getMessage());
+                return "error-page";
             }
         }
     }
@@ -87,7 +90,8 @@ public class TeamController {
             model.addAttribute("mylist", teamService.getAllTeams());
             return "redirect:/team/all";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            model.addAttribute("msg", e.getMessage());
+            return "error-page";
         }
     }
 }

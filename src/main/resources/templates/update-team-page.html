@@ -55,7 +55,7 @@
 <form action="#" th:action="@{/team/update/{id}(id=${id})}" th:object="${team}" th:method="post">
     <table>
         <thead>
-        <td colspan="3"><h2>Update Driver</h2></td>
+        <td colspan="3"><h2>Update Team</h2></td>
         </thead>
         <tbody>
         </tr>
@@ -67,7 +67,7 @@
             <td>First Driver</td>
             <td>
                 <select th:field="*{driver1}">
-                    <option value="" th:text="#{--Select a Driver--}"></option>
+                    <option value="">Select a Driver</option>
                     <option th:each="driver : ${availableDrivers}" th:value="${driver.idD}" th:text="${driver.name + ' ' + driver.surname}"></option>
                 </select>
             </td>
@@ -77,7 +77,7 @@
             <td>Second Driver</td>
             <td>
                 <select th:field="*{driver2}">
-                    <option value="" th:text="#{--Select a Driver--}"></option>
+                    <option value="">Select a Driver</option>
                     <option th:each="driver : ${availableDrivers}" th:value="${driver.idD}" th:text="${driver.name + ' ' + driver.surname}"></option>
                 </select>
             </td>

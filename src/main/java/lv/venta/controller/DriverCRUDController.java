@@ -16,7 +16,7 @@ public class DriverCRUDController {
     @Autowired
     IDriverCRUDService crudService;
 
-    @GetMapping("/create")
+    @GetMapping("/create")		//localhost:8080/driver/create
     public String getDriverCreate(Model model) {
         model.addAttribute("driver", new Driver());
         return "create-driver-page";
@@ -31,15 +31,16 @@ public class DriverCRUDController {
                 crudService.createDriver(driver);
                 return "redirect:/driver/all";
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                return "error-page";
             }
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all")			//localhost:8080/driver/all
     public String getDriverAll(Model model) {
         try {
             model.addAttribute("mylist", crudService.getAllDrivers());
+            model.addAttribute("title", "All Drivers");
             return "show-driver-all-page";
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage());
@@ -47,35 +48,36 @@ public class DriverCRUDController {
         }
     }
 
-    @GetMapping("/update/{id}") //localhost:8080/driver/update?id=1
+    @GetMapping("/update/{id}") 		//localhost:8080/driver/update?id=1
     public String getDriverUpateById(@PathVariable("id") int id, Model model ) {
-        Driver driver = null;
         try {
-            driver = crudService.getDriverById(id);
+        	Driver driver = crudService.getDriverById(id);
             model.addAttribute("id", id);
             model.addAttribute("name", driver.getName());
             model.addAttribute("driver", driver);
             return "update-driver-page";
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+        	model.addAttribute("msg", e.getMessage());
+			return "error-page";
+		}
     }
     @PostMapping("/update/{id}")
     public String postdriverUpdate(@PathVariable("id") int id, @Valid Driver driver, BindingResult result, Model model) {
         if (result.hasErrors()) {
+        	model.addAttribute("id", id);
             return "update-driver-page";
         }else {
             try {
                 crudService.updateDriverById(id, driver);
                 return "redirect:/driver/all";
             } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            	model.addAttribute("msg", e.getMessage());
+    			return "error-page";
+    		}
         }
     }
 
-    @GetMapping("/delete/{id}") //localhost:8080/driver/delete/1
+    @GetMapping("/delete/{id}") 		//localhost:8080/driver/delete/1
     public String getProductDeleteById(@PathVariable("id") int id, Model model) {
 
         try {
@@ -83,8 +85,9 @@ public class DriverCRUDController {
             model.addAttribute("mylist", crudService.getAllDrivers());
             return "redirect:/driver/all";
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+			model.addAttribute("msg", e.getMessage());
+			return "error-page";
+		}
     }
 
 }

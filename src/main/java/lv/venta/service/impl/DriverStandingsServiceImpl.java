@@ -37,13 +37,14 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
     @Override
     public DriverStandings getDriverStandingsById(int id) throws Exception {
+    	if(id < 0) throw new Exception("Wrong Input - Id should be positive!");
         return driverStandingsRepo.findById(id).orElse(null);
     }
 
     public void addRaceResult(Race race, ArrayList<RaceResult> raceResults) {
-        if (!raceRepo.existsById(race.getIdR())) {
+        if (!raceRepo.existsById(race.getIdR()))
             raceRepo.save(race);
-        }
+        
         for (RaceResult result : raceResults) {
             raceResultRepo.save(result);
 
@@ -54,22 +55,20 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
             Team team = result.getDriver().getTeam();
             TeamStandings teamStandings = teamStandingsRepo.findByTeamIdT(team.getIdT());
-            teamStandings.setPoints(teamStandings.getPoints() + driverStandings.getPoints());
+            teamStandings.setPoints(teamStandings.getPoints() + driverStandings.getPointsPerRace());
             teamStandingsRepo.save(teamStandings);
         }
     }
 
     @Override
-    public void updateDriverStanding(int id, DriverStandings driverStandings) throws Exception {
+    public void updateDriverStanding(int id, DriverStandings driverStandings) throws Exception {    	
         DriverStandings existingDriverStandings = driverStandingsRepo.findById(id).orElse(null);
         if (existingDriverStandings != null) {
             existingDriverStandings.setDriver(driverStandings.getDriver());
-            existingDriverStandings.setPoints(driverStandings.getPoints());
+            existingDriverStandings.setPointsPerRace(driverStandings.getPointsPerRace());
             driverStandingsRepo.save(existingDriverStandings);
-        } else {
-
-            throw new Exception("Driver standings not found for id: " + id);
-        }
+        } else
+            throw new Exception("Driver standings not found with id: " + id);
 
     }
 
