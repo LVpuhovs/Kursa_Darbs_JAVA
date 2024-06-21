@@ -2,7 +2,6 @@ package lv.venta.controller;
 
 import lv.venta.model.DriverStandings;
 import lv.venta.model.Race;
-import lv.venta.model.RaceResult;
 import lv.venta.service.IDriverCRUDService;
 import lv.venta.service.IDriverStandingsService;
 import lv.venta.service.ITeamService;
@@ -14,7 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/standings")
@@ -23,6 +24,9 @@ public class StandingsController {
 
     @Autowired
     private IDriverCRUDService crudService;
+    
+    @Autowired
+    private ITeamService teamService;
 
     @Autowired
     private ITeamStandingsService teamStandingsService;
@@ -37,13 +41,25 @@ public class StandingsController {
 
     @GetMapping("/driver/all")
     public String getDriverStandingsAll(Model model) {
-        int numberOfRaces = 10;
-        model.addAttribute("numberOfRaces", numberOfRaces);
-        //iziet cauri sarakstam, un filtree tikai tos braucejus kuriem ir komanda un salasa listaa
         try {
-			model.addAttribute("drivers", crudService.getAllDrivers().stream().filter(driver -> driver.getTeam() != null).collect(Collectors.toList()));
-			model.addAttribute("mylist", driverStandingsService.getAllDriverStandings());
-	        return "driver-standings-page"; 
+        	List<DriverStandings> standings = driverStandingsService.getAllDriverStandings();
+        	List<Race> races = driverStandingsService.getAllRaces();
+
+            Map<Integer, DriverStandings> standingsMap = new LinkedHashMap<>();
+
+            for (DriverStandings standing : standings) {
+            	            	
+                int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
+                standing.getDriver().setTotalPoints(totalPoints);
+                
+                if (!standingsMap.containsKey(standing.getDriver().getIdD())) //avoid duplicate drivers
+                    standingsMap.put(standing.getDriver().getIdD(), standing);
+                }
+
+            model.addAttribute("standings", standings);
+            model.addAttribute("races", races);
+
+            return "driver-standings-page";
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage());
             return "error-page";
@@ -53,9 +69,13 @@ public class StandingsController {
 
     @GetMapping("/team/all")
     public String getTeamStandingsAll(Model model) {
+    	int numberOfRaces = 2;
+    	model.addAttribute("numberOfRaces", numberOfRaces);
         try {
-        	model.addAttribute("mylist", teamStandingsService.getAllTeamStandings());
+        	teamStandingsService.calculateAndUpdateAllTeamPoints();
+        	model.addAttribute("teams", teamStandingsService.getAllTeamStandings());
             return "team-standings-page";
+        	
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage());
             return "error-page";

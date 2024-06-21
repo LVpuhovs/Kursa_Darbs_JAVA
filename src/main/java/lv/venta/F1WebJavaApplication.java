@@ -1,15 +1,24 @@
 package lv.venta;
 
 import lv.venta.model.Driver;
+import lv.venta.model.DriverStandings;
+import lv.venta.model.Race;
+import lv.venta.model.RaceResult;
 import lv.venta.model.Team;
 import lv.venta.repo.IDriverRepo;
+import lv.venta.repo.IDriverStandingsRepo;
+import lv.venta.repo.IRaceRepo;
+import lv.venta.repo.IRaceResultRepo;
 import lv.venta.repo.ITeamRepo;
+import lv.venta.repo.ITeamStandingsRepo;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class F1WebJavaApplication {
@@ -18,7 +27,8 @@ public class F1WebJavaApplication {
         SpringApplication.run(F1WebJavaApplication.class, args);
     }
     @Bean
-    public CommandLineRunner testDatabaseLayer(IDriverRepo driverRepo, ITeamRepo teamRepo) {
+    public CommandLineRunner testDatabaseLayer(IDriverRepo driverRepo, ITeamRepo teamRepo, IRaceRepo raceRepo, IRaceResultRepo raceResultRepo, 
+    		IDriverStandingsRepo driverStandingsRepo, ITeamStandingsRepo teamStandingsRepo) {
         return new CommandLineRunner() {
 
             @Override
@@ -86,8 +96,84 @@ public class F1WebJavaApplication {
                 teamRepo.save(t10);
                 driverRepo.save(d19);
                 driverRepo.save(d20);
+                
+                Race race1 = new Race("Japan");     
+                raceRepo.save(race1);
+                Race race2 = new Race("Monaco");   
+                raceRepo.save(race2);
+
+                List<RaceResult> raceResult1 = List.of(
+                		new RaceResult(race1, d1, 1),
+                        new RaceResult(race1, d2, 2),
+                        new RaceResult(race1, d3, 3),
+                        new RaceResult(race1, d4, 4),
+                        new RaceResult(race1, d5, 5),
+                        new RaceResult(race1, d6, 6),
+                        new RaceResult(race1, d7, 7),
+                        new RaceResult(race1, d8, 8),
+                        new RaceResult(race1, d9, 9),
+                        new RaceResult(race1, d10, 10),
+                        
+                        new RaceResult(race1, d11, 11),
+                        new RaceResult(race1, d12, 12),
+                        new RaceResult(race1, d13, 13),
+                        new RaceResult(race1, d14, 14),
+                        new RaceResult(race1, d15, 15),
+                        new RaceResult(race1, d16, 16),
+                        new RaceResult(race1, d17, 17),
+                        new RaceResult(race1, d18, 18),
+                        new RaceResult(race1, d19, 19),
+                        new RaceResult(race1, d20, 20)
+                		);
+                raceResultRepo.saveAll(raceResult1);
+                
+                List<DriverStandings> drivStand1 = new ArrayList<>();
+                for(RaceResult raceResult : raceResult1) {
+                	DriverStandings drivStand = new DriverStandings(raceResult.getDriver(), raceResult , 1);
+                	drivStand.calculatePoints();
+                	drivStand1.add(drivStand);                	
+                }
+                driverStandingsRepo.saveAll(drivStand1);
+               
+                
+                
+                
+                List<RaceResult> raceResult2 = List.of(
+                		new RaceResult(race2, d1, 10),
+                        new RaceResult(race2, d2, 1),
+                        new RaceResult(race2, d3, 4),
+                        new RaceResult(race2, d4, 3),
+                        new RaceResult(race2, d5, 6),
+                        new RaceResult(race2, d6, 5),
+                        new RaceResult(race2, d7, 8),
+                        new RaceResult(race2, d8, 7),
+                        new RaceResult(race2, d9, 1),
+                        new RaceResult(race2, d10, 11),
+                        
+                        new RaceResult(race2, d11, 20),
+                        new RaceResult(race2, d12, 12),
+                        new RaceResult(race2, d13, 13),
+                        new RaceResult(race2, d14, 14),
+                        new RaceResult(race2, d15, 9),
+                        new RaceResult(race2, d16, 16),
+                        new RaceResult(race2, d17, 17),
+                        new RaceResult(race2, d18, 18),
+                        new RaceResult(race2, d19, 19),
+                        new RaceResult(race2, d20, 15)
+                		);
+                raceResultRepo.saveAll(raceResult2);
+                
+                List<DriverStandings> drivStand2 = new ArrayList<>();
+                for(RaceResult raceResult : raceResult2) {
+                	DriverStandings drivStandings = new DriverStandings(raceResult.getDriver(), raceResult , 2);
+                	drivStandings.calculatePoints();
+                	drivStand2.add(drivStandings);                	
+                }
+                driverStandingsRepo.saveAll(drivStand2);
+                
+                
+                
             }
         };
     }
-
 }

@@ -21,17 +21,20 @@ public class RaceResult {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "race_id", referencedColumnName = "idR")
+    @JoinColumn(name = "idR", referencedColumnName = "idR")
     private Race race;
-
+    
     @ManyToOne
-    @JoinColumn(name = "driver_id", referencedColumnName = "IdD")
+    @JoinColumn(name = "IdD", referencedColumnName = "IdD")
     private Driver driver;
 
-    @NotNull
     @Min(1)
     @Column(name = "position")
     private int position;
+    
+    @OneToOne(mappedBy = "raceResult")
+    @PrimaryKeyJoinColumn
+    private DriverStandings driverStandings;
 
     public RaceResult(Race race, Driver driver, int position) {
         setRace(race);

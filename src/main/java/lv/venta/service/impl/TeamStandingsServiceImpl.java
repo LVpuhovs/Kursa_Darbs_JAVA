@@ -49,4 +49,12 @@ public class TeamStandingsServiceImpl implements ITeamStandingsService {
 
         teamStandingsRepo.delete(existingTeamStandings);
     }
+    
+    public void calculateAndUpdateAllTeamPoints() {
+    	ArrayList<TeamStandings> teamStandList = getAllTeamStandings();
+    	for(TeamStandings teamStand : teamStandList) {
+    		teamStand.calculateTeamPoints();
+    		teamStandingsRepo.save(teamStand);
+    	}
+    }
 }
