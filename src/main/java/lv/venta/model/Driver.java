@@ -48,6 +48,10 @@ public class Driver {
     @Column(name = "TotalPoints")
     private int totalPoints;
 
+    @Min(0)
+    @Column(name = "Wins")
+    private int wins;
+
     @OneToMany(mappedBy = "driver")
     private Collection<DriverStandings> driverStandings;
 

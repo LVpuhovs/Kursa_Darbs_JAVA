@@ -131,7 +131,7 @@ public class F1WebJavaApplication {
                 for(RaceResult raceResult : raceResult1) {
                 	DriverStandings drivStand = new DriverStandings(raceResult.getDriver(), raceResult , 1);
                 	drivStand.calculatePoints();
-                	drivStand1.add(drivStand);                	
+                	drivStand1.add(drivStand);
                 }
                 driverStandingsRepo.saveAll(drivStand1);
                
@@ -147,7 +147,7 @@ public class F1WebJavaApplication {
                         new RaceResult(race2, d6, 5),
                         new RaceResult(race2, d7, 8),
                         new RaceResult(race2, d8, 7),
-                        new RaceResult(race2, d9, 1),
+                        new RaceResult(race2, d9, 2),
                         new RaceResult(race2, d10, 11),
                         
                         new RaceResult(race2, d11, 20),

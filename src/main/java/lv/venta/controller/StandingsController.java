@@ -42,19 +42,26 @@ public class StandingsController {
     @GetMapping("/driver/all")
     public String getDriverStandingsAll(Model model) {
         try {
-        	List<DriverStandings> standings = driverStandingsService.getAllDriverStandings();
+        	List<DriverStandings> standings = driverStandingsService.getAllDriverStandingsWithRaceResults();
         	List<Race> races = driverStandingsService.getAllRaces();
 
             Map<Integer, DriverStandings> standingsMap = new LinkedHashMap<>();
 
             for (DriverStandings standing : standings) {
-            	            	
+
+
                 int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
+
                 standing.getDriver().setTotalPoints(totalPoints);
                 
-                if (!standingsMap.containsKey(standing.getDriver().getIdD())) //avoid duplicate drivers
+                if (standingsMap.containsKey(standing.getDriver().getIdD())){
+                    DriverStandings existingStanding = standingsMap.get(standing.getDriver().getIdD());
+                    existingStanding.setPointsPerRace(existingStanding.getPointsPerRace() + standing.getPointsPerRace());
+
+                }else {
                     standingsMap.put(standing.getDriver().getIdD(), standing);
                 }
+            }
 
             model.addAttribute("standings", standings);
             model.addAttribute("races", races);

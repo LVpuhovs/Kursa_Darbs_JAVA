@@ -62,30 +62,25 @@
     <th>Position</th>
     <th>Driver</th>
 	<th th:each="race : ${races}">
-		<a th:href="@{/standings/driver/update/{id}(id=${race.idR})}" class="table-link" th:text="${race.raceName}"></a> <!--shows name for each race -->
+		<a th:href="@{/standings/driver/update/{id}(id=${race.idR})}" class="table-link" th:text="${race.raceName}"></a>
     </th>
+      <th>Wins</th>
 	<th>Total Points</th>
 	    </tr>
 		 <tbody>
-			
+
 			<tr th:each="standing, rowStat : ${standings}">
-			            <td th:text="${rowStat.index + 1}"></td>
-			              <td th:text="${standing.driver.name} + ' ' + ${standing.driver.surname} + ' ' + ${standing.driver.number}"></td>
-						  <!-- Example of displaying points for Japan race -->
-						             <td>
-						                 <span th:each="raceResult : ${standing.raceResult}">
-						                     <span th:if="${raceResult.race.raceName == 'Japan'}" th:text="${raceResult.driverStandings.pointsPerRace}"></span>
-						                 </span>
-						             </td>
-						             <!-- Example of displaying points for Monaco race -->
-						             <td>
-						                 <span th:each="raceResult : ${standing.raceResult}">
-						                     <span th:if="${raceResult.race.raceName == 'Monaco'}" th:text="${raceResult.driverStandings.pointsPerRace}"></span>
-						                 </span>
-						             </td>
-			            <td th:text="${standing.driver.totalPoints}"></td>
-			        </tr>
-		    </tbody>
-		</table>
-		</body>
-		</html>
+                <td th:text="${rowStat.index + 1}"></td>
+                <td th:text="${standing.driver.name} + ' ' + ${standing.driver.surname} + ' ' + ${standing.driver.number}"></td>
+                <td th:each="race : ${races}">
+                    <span th:each="raceResult : ${standing.raceResult}">
+                        <span th:if="${raceResult.race.idR == race.idR}" th:text="${raceResult.driverStandings.pointsPerRace}"></span>
+                    </span>
+                </td>
+                <td th:text="${standing.wins}"></td>
+                <td th:text="${standing.driver.totalPoints}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

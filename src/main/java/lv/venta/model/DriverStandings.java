@@ -44,6 +44,8 @@ public class DriverStandings {
     private int numberOfTheRace;
 
 
+
+
     public DriverStandings(Driver driver, RaceResult raceResult , int numberOfTheRace) {
         setDriver(driver);
         setNumberOfTheRace(numberOfTheRace);
@@ -58,7 +60,10 @@ public class DriverStandings {
         
         if(position > 0 && position <= pointsPerPosition.length) {
         	points = pointsPerPosition[position - 1];
-        	if(position == 1) wins++;
+        	if(position == 1) {
+                wins++;
+                raceResult.getDriver().setWins(wins);
+            }
         }
         if(isFastestLap()) points++;
         

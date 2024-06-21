@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
@@ -104,9 +107,12 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
 	@Override
 	public int calculateDriverTotalPointsById(int id) throws Exception {
-		return driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);
-		
-		
+        int totalPoints = driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);
+        Driver driver = driverRepo.findById(id).orElseThrow(() -> new Exception("Driver not found"));
+
+        driver.setTotalPoints(totalPoints);
+        driverRepo.save(driver);
+        return totalPoints;
 	}
 
 	@Override
@@ -115,9 +121,22 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 	}
 	@Override
 	public List<DriverStandings> getAllDriverStandingsWithRaceResults() {
-	    List<DriverStandings> standings = (List<DriverStandings>) driverStandingsRepo.findAll();
-	    for (DriverStandings standing : standings)
-	        standing.setRaceResult(raceResultRepo.findByDriverStandings(standing));
-	    return standings;
+        List<DriverStandings> standings = getAllDriverStandings();
+
+
+        Map<Integer, DriverStandings> standingsMap = new LinkedHashMap<>();
+
+        for (DriverStandings standing : standings) {
+            int driverId = standing.getDriver().getIdD();
+            if (standingsMap.containsKey(driverId)) {
+                DriverStandings existingStanding = standingsMap.get(driverId);
+                existingStanding.setPointsPerRace(existingStanding.getPointsPerRace() + standing.getPointsPerRace());
+                existingStanding.setWins(existingStanding.getWins() + standing.getWins());
+            } else {
+                standingsMap.put(driverId, standing);
+            }
+        }
+
+        return new ArrayList<>(standingsMap.values());
 	}
 }
