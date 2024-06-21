@@ -10,4 +10,5 @@ public interface ITeamStandingsService {
     TeamStandings addTeamStanding(TeamStandings teamStandings) throws Exception;
     void updateTeamStanding(int id, TeamStandings teamStandings) throws Exception;
     void deleteTeamStanding(int id) throws Exception;
+    void calculateAndUpdateAllTeamPoints();
 }

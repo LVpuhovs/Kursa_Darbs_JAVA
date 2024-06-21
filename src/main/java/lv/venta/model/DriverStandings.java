@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Collection;
 
 @Getter
 @Setter
@@ -34,38 +33,36 @@ public class DriverStandings {
     @Column(name = "Wins")
     private int wins;
 
-    @Min(0)
-    @Column(name = "FastestLaps")
-    private int fastestLaps;
+    @Column(name = "FastestLap")
+    private boolean fastestLap;
 
-    @Min(0)
-    @ElementCollection
-    private Collection<Integer> raceResults;
+    @OneToOne
+    private RaceResult raceResult;
 
-    @Min(10)
+    @Min(1)
     @Max(24)
-    private int numberOfRaces;
+    private int numberOfTheRace;
 
 
-    public DriverStandings(Driver driver, int numberOfRaces) {
+    public DriverStandings(Driver driver, RaceResult raceResult , int numberOfTheRace) {
         setDriver(driver);
-        setNumberOfRaces(numberOfRaces);
+        setNumberOfTheRace(numberOfTheRace);
+        setRaceResult(raceResult);
         calculatePoints();
     }
 
-    public void calculatePoints() { 				//all the points for 1 driver
+    public void calculatePoints() {
         int[] pointsPerPosition = {25, 18, 15, 12, 10, 8, 6, 4, 2, 1};
-        int totalPoints = 0;
-        int currentWinPosition = 0;
-        for (int position : raceResults) {
-            if (position <= pointsPerPosition.length) {
-                totalPoints += pointsPerPosition[position - 1];
-                
-                if (position == 1)
-                    currentWinPosition++;
-            }
+        int position = raceResult.getPosition();
+        int points = 0;
+        
+        if(position > 0 && position <= pointsPerPosition.length) {
+        	points = pointsPerPosition[position - 1];
+        	if(position == 1) wins++;
         }
-        setPointsPerRace(totalPoints);
-        setWins(currentWinPosition);
+        if(isFastestLap()) points++;
+        
+        setPointsPerRace(points);
+        driver.setTotalPoints(driver.getTotalPoints() + points);
     }
 }

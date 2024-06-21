@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,8 +23,8 @@ public class Race {
     @Column(name = "raceName")
     private String raceName;
 
-    @OneToMany(mappedBy = "race")
-    private Collection<RaceResult> raceResults;
+    @OneToMany(mappedBy = "race", cascade = CascadeType.ALL)
+    private List<RaceResult> raceResults;
 
     public Race(String raceName) {
         setRaceName(raceName);

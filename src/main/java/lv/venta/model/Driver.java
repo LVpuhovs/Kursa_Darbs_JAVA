@@ -34,7 +34,6 @@ public class Driver {
     @Column(name = "Surname")
     private String surname;
 
-    @NotNull
     @Min(1)
     @Max(99)
     @Column(name = "DriverNumber")
@@ -44,6 +43,10 @@ public class Driver {
     @JoinColumn(name = "idT")
     @ToString.Exclude
     private Team team;
+    
+    @Min(0)
+    @Column(name = "TotalPoints")
+    private int totalPoints;
 
     @OneToMany(mappedBy = "driver")
     private Collection<DriverStandings> driverStandings;

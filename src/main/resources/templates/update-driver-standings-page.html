@@ -16,6 +16,7 @@
 
         th {
             background-color: #000000;
+			color: white;
             border: 1px solid #ddd;
             padding: 5px;
             text-align: left;
@@ -63,9 +64,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="raceResult, idx : ${driverStandings.raceResults}">
+        <tr th:each="raceResult, idx : ${driverStandings.raceResult}">
             <td th:text="${idx.index + 1}"></td>
-            <td><input type="text" th:field="*{raceResults[__${idx.index}__]}"/></td>
+            <td><input type="text" th:field="*{raceResult[__${idx.index}__]}"/></td>
         </tr>
         </tbody>
     </table>
