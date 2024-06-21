@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,6 +47,9 @@ public class Driver {
     @Min(0)
     @Column(name = "TotalPoints")
     private int totalPoints;
+    
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    private List<RaceResult> raceResults;
 
     @Min(0)
     @Column(name = "Wins")
@@ -63,9 +65,6 @@ public class Driver {
     @Min(0)
     @Column(name = "TotalWins")
     private int totalWins;
-
-    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
-    private List<RaceResult> raceResults;
 
     public Driver(String name, String surname, int number){
         setName(name);

@@ -60,7 +60,7 @@
 		    <th>Position</th>
 		    <th>Team</th>
 			  <th th:each="race : ${races}">
-				  <a th:href="@{/standings/team/update/race/{id}(id=${race.idR})}" class="table-link" th:text="${race.raceName}"></a>
+				  <a th:text="${race.raceName}"></a>
 			  </th>
 			  <th>Total Points</th>
 		  </tr>

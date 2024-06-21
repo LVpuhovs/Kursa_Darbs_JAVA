@@ -1,7 +1,6 @@
 package lv.venta.controller;
 
 import jakarta.validation.Valid;
-import lv.venta.model.Driver;
 import lv.venta.model.Team;
 import lv.venta.service.IDriverCRUDService;
 import lv.venta.service.ITeamService;
