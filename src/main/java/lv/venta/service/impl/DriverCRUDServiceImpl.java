@@ -33,7 +33,7 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
         Driver existingDriver = getDriverById(id);
         if (existingDriver == null) throw new Exception("Driver not found");
         
-        if(driver.getNumber() != existingDriver.getNumber()) {		//when updating driver num, checks if a driver with that num already exists
+        if(driver.getNumber() != existingDriver.getNumber()) {
         	Driver driverWithSameNum = driverRepo.findByNumber(driver.getNumber());
         	if(driverWithSameNum != null && driverWithSameNum.getNumber() == driver.getNumber()) 
         		throw new Exception("Driver with number " + driver.getNumber() + " is already registered");
