@@ -69,5 +69,6 @@ public class DriverStandings {
         
         setPointsPerRace(points);
         driver.setTotalPoints(driver.getTotalPoints() + points);
+
     }
 }

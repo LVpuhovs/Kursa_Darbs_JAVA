@@ -122,17 +122,11 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 	@Override
 	public List<DriverStandings> getAllDriverStandingsWithRaceResults() {
         List<DriverStandings> standings = getAllDriverStandings();
-
-
         Map<Integer, DriverStandings> standingsMap = new LinkedHashMap<>();
 
         for (DriverStandings standing : standings) {
             int driverId = standing.getDriver().getIdD();
-            if (standingsMap.containsKey(driverId)) {
-                DriverStandings existingStanding = standingsMap.get(driverId);
-                existingStanding.setPointsPerRace(existingStanding.getPointsPerRace() + standing.getPointsPerRace());
-                existingStanding.setWins(existingStanding.getWins() + standing.getWins());
-            } else {
+            if (!standingsMap.containsKey(driverId)) {
                 standingsMap.put(driverId, standing);
             }
         }
