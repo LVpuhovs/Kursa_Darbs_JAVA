@@ -1,6 +1,7 @@
 package lv.venta.service.impl;
 
 import lv.venta.model.*;
+import lv.venta.repo.IDriverRepo;
 import lv.venta.repo.IDriverStandingsRepo;
 import lv.venta.repo.IRaceRepo;
 import lv.venta.repo.IRaceResultRepo;
@@ -10,11 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 @Service
 public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
     @Autowired
     private IDriverStandingsRepo driverStandingsRepo;
+    
+    @Autowired
+    private IDriverRepo driverRepo;
 
     @Autowired
     private IRaceRepo raceRepo;
@@ -29,6 +34,7 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
     public ArrayList<DriverStandings> getAllDriverStandings() {
         return (ArrayList<DriverStandings>) driverStandingsRepo.findAll();
     }
+       
 
     @Override
     public ArrayList<Race> getAllRaces() {
@@ -40,23 +46,39 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
     	if(id < 0) throw new Exception("Wrong Input - Id should be positive!");
         return driverStandingsRepo.findById(id).orElse(null);
     }
-
-    public void addRaceResult(Race race, ArrayList<RaceResult> raceResults) {
+    
+   @Override
+    public void addRaceResult(Race race, RaceResult raceResult) {
         if (!raceRepo.existsById(race.getIdR()))
             raceRepo.save(race);
+        if (!raceResultRepo.existsById(raceResult.getId())) 
+            raceResultRepo.save(raceResult);
+
+        Driver driver = raceResult.getDriver();
+        DriverStandings driverStandings = driverStandingsRepo.findByDriverIdD(driver.getIdD());
+        if (driverStandings == null) 
+            driverStandings = new DriverStandings(driver, raceResult, race.getIdR());
+        else {
+            driverStandings.setRaceResult(raceResult);
+            driverStandings.setNumberOfTheRace(race.getIdR());
+        }
+        driverStandingsRepo.save(driverStandings);
         
-        for (RaceResult result : raceResults) {
-            raceResultRepo.save(result);
+        try {
+            int totalPoints = calculateDriverTotalPointsById(driver.getIdD());
+            driver.setTotalPoints(totalPoints);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        driverRepo.save(driver);
 
-            DriverStandings driverStandings = driverStandingsRepo.findByDriverIdD(result.getDriver().getIdD());
-            driverStandings.getRaceResults().add(result.getPosition());
-            driverStandings.calculatePoints();
-            driverStandingsRepo.save(driverStandings);
-
-            Team team = result.getDriver().getTeam();
+        Team team = driver.getTeam();
+        if (team != null) {
             TeamStandings teamStandings = teamStandingsRepo.findByTeamIdT(team.getIdT());
-            teamStandings.setPoints(teamStandings.getPoints() + driverStandings.getPointsPerRace());
-            teamStandingsRepo.save(teamStandings);
+            if (teamStandings != null) {
+                teamStandings.setPoints(teamStandings.getPoints() + driverStandings.getPointsPerRace());
+                teamStandingsRepo.save(teamStandings);
+            }
         }
     }
 
@@ -79,4 +101,23 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
         driverStandingsRepo.delete(existingDriverStandings);
     }
+
+	@Override
+	public int calculateDriverTotalPointsById(int id) throws Exception {
+		return driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);
+		
+		
+	}
+
+	@Override
+	public List<DriverStandings> getDriverStandingsByRaceId(int raceId) {
+		return driverStandingsRepo.findByRaceResultRaceIdR(raceId);
+	}
+	@Override
+	public List<DriverStandings> getAllDriverStandingsWithRaceResults() {
+	    List<DriverStandings> standings = (List<DriverStandings>) driverStandingsRepo.findAll();
+	    for (DriverStandings standing : standings)
+	        standing.setRaceResult(raceResultRepo.findByDriverStandings(standing));
+	    return standings;
+	}
 }

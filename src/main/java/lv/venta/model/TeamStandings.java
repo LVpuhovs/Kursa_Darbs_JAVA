@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "DriverStandings")
+@Table(name = "TeamStandings")
 @Entity
 public class TeamStandings {
     @Setter(AccessLevel.NONE)
@@ -27,6 +27,19 @@ public class TeamStandings {
 
     public TeamStandings(Team team, int points) {
         setTeam(team);
-        setPoints(points);
+        calculateTeamPoints();
+    }
+    
+    public void calculateTeamPoints() {
+    	int totalPoints = 0;
+    	if(team.getDriver1() != null) {
+    		for(DriverStandings standings : team.getDriver1().getDriverStandings())
+    			totalPoints += standings.getPointsPerRace();
+    	}
+    	if(team.getDriver2() != null) {
+    		for(DriverStandings standings : team.getDriver2().getDriverStandings())
+    			totalPoints += standings.getPointsPerRace();
+    	}
+    	setPoints(totalPoints);
     }
 }
