@@ -54,7 +54,7 @@ public class TeamController {
         }
     }
 
-    @GetMapping("/update/{id}") //localhost:8080/team/update?id=1
+    @GetMapping("/update/{id}") //localhost:8080/team/update/1
     public String getTeamUpdateById(@PathVariable("id") int id, Model model ) {
         try {
             model.addAttribute("id", id);
