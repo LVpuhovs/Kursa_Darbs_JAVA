@@ -13,10 +13,10 @@ import lombok.*;
 @Entity
 public class TeamStandings {
     @Setter(AccessLevel.NONE)
-    @Column(name = "IdDT")
+    @Column(name = "IdTT")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int idDT;
+    private int idTT;
 
     @NotNull
     @ManyToOne
@@ -25,7 +25,7 @@ public class TeamStandings {
     @Min(0)
     private int points;
 
-    public TeamStandings(Team team, int points) {
+    public TeamStandings(Team team) {
         setTeam(team);
         calculateTeamPoints();
     }

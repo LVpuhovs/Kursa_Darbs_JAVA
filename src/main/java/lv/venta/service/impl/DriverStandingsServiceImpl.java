@@ -83,6 +83,7 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
                 teamStandingsRepo.save(teamStandings);
             }
         }
+       updateDriverPositions();
     }
 
     @Override
@@ -106,14 +107,14 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
     }
 
 	@Override
-	public int calculateDriverTotalPointsById(int id) throws Exception {
-        int totalPoints = driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);
-        Driver driver = driverRepo.findById(id).orElseThrow(() -> new Exception("Driver not found"));
-
-        driver.setTotalPoints(totalPoints);
-        driverRepo.save(driver);
-        return totalPoints;
+	public int calculateDriverTotalPointsById(int id){
+        return driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);
 	}
+
+    @Override
+    public int calculateDriverTotalWinsById(int id) {
+        return driverStandingsRepo.sumWinsByDriverIdD(id);
+    }
 
 	@Override
 	public List<DriverStandings> getDriverStandingsByRaceId(int raceId) {
@@ -133,4 +134,14 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
         return new ArrayList<>(standingsMap.values());
 	}
+
+    @Override
+    public void updateDriverPositions() {
+        List<Driver> drivers = (List<Driver>) driverRepo.findAll();
+        drivers.sort((d1, d2) -> Integer.compare(d2.getTotalPoints(), d1.getTotalPoints()));
+
+        for(int i = 0; i < drivers.size(); i++)
+            drivers.get(i).setDriverTotalPosition(i + 1);
+        driverRepo.saveAll(drivers);
+    }
 }

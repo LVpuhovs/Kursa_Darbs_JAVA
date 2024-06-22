@@ -18,7 +18,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootApplication
 public class F1WebJavaApplication {
@@ -26,9 +28,10 @@ public class F1WebJavaApplication {
     public static void main(String[] args) {
         SpringApplication.run(F1WebJavaApplication.class, args);
     }
+
     @Bean
-    public CommandLineRunner testDatabaseLayer(IDriverRepo driverRepo, ITeamRepo teamRepo, IRaceRepo raceRepo, IRaceResultRepo raceResultRepo, 
-    		IDriverStandingsRepo driverStandingsRepo, ITeamStandingsRepo teamStandingsRepo) {
+    public CommandLineRunner testDatabaseLayer(IDriverRepo driverRepo, ITeamRepo teamRepo, IRaceRepo raceRepo, IRaceResultRepo raceResultRepo,
+                                               IDriverStandingsRepo driverStandingsRepo, ITeamStandingsRepo teamStandingsRepo) {
         return new CommandLineRunner() {
 
             @Override
@@ -96,84 +99,105 @@ public class F1WebJavaApplication {
                 teamRepo.save(t10);
                 driverRepo.save(d19);
                 driverRepo.save(d20);
-                
-                Race race1 = new Race("Japan");     
-                raceRepo.save(race1);
-                Race race2 = new Race("Monaco");   
-                raceRepo.save(race2);
 
-                List<RaceResult> raceResult1 = List.of(
-                		new RaceResult(race1, d1, 1),
-                        new RaceResult(race1, d2, 2),
-                        new RaceResult(race1, d3, 3),
-                        new RaceResult(race1, d4, 4),
-                        new RaceResult(race1, d5, 5),
-                        new RaceResult(race1, d6, 6),
-                        new RaceResult(race1, d7, 7),
-                        new RaceResult(race1, d8, 8),
-                        new RaceResult(race1, d9, 9),
-                        new RaceResult(race1, d10, 10),
-                        
-                        new RaceResult(race1, d11, 11),
-                        new RaceResult(race1, d12, 12),
-                        new RaceResult(race1, d13, 13),
-                        new RaceResult(race1, d14, 14),
-                        new RaceResult(race1, d15, 15),
-                        new RaceResult(race1, d16, 16),
-                        new RaceResult(race1, d17, 17),
-                        new RaceResult(race1, d18, 18),
-                        new RaceResult(race1, d19, 19),
-                        new RaceResult(race1, d20, 20)
-                		);
+                Race race1 = new Race("Japan");
+                raceRepo.save(race1);
+                Race race2 = new Race("Monaco");
+                raceRepo.save(race2);
+                Race race3 = new Race("Australia");
+                raceRepo.save(race3);
+                Race race4 = new Race("Italy");
+                raceRepo.save(race4);
+                Race race5 = new Race("USA");
+                raceRepo.save(race5);
+                Race race6 = new Race("Germany");
+                raceRepo.save(race6);
+                Race race7 = new Race("Canada");
+                raceRepo.save(race7);
+                Race race8 = new Race("Spain");
+                raceRepo.save(race8);
+                Race race9 = new Race("Romania");
+                raceRepo.save(race9);
+                Race race10 = new Race("Austria");
+                raceRepo.save(race10);
+
+                Random random = new Random();
+                List<RaceResult> raceResult1 = generateRaceResults(race1, (List<Driver>) driverRepo.findAll(), random);
                 raceResultRepo.saveAll(raceResult1);
-                
-                List<DriverStandings> drivStand1 = new ArrayList<>();
-                for(RaceResult raceResult : raceResult1) {
-                	DriverStandings drivStand = new DriverStandings(raceResult.getDriver(), raceResult , 1);
-                	drivStand.calculatePoints();
-                	drivStand1.add(drivStand);
-                }
-                driverStandingsRepo.saveAll(drivStand1);
-               
-                
-                
-                
-                List<RaceResult> raceResult2 = List.of(
-                		new RaceResult(race2, d1, 10),
-                        new RaceResult(race2, d2, 1),
-                        new RaceResult(race2, d3, 4),
-                        new RaceResult(race2, d4, 3),
-                        new RaceResult(race2, d5, 6),
-                        new RaceResult(race2, d6, 5),
-                        new RaceResult(race2, d7, 8),
-                        new RaceResult(race2, d8, 7),
-                        new RaceResult(race2, d9, 2),
-                        new RaceResult(race2, d10, 11),
-                        
-                        new RaceResult(race2, d11, 20),
-                        new RaceResult(race2, d12, 12),
-                        new RaceResult(race2, d13, 13),
-                        new RaceResult(race2, d14, 14),
-                        new RaceResult(race2, d15, 9),
-                        new RaceResult(race2, d16, 16),
-                        new RaceResult(race2, d17, 17),
-                        new RaceResult(race2, d18, 18),
-                        new RaceResult(race2, d19, 19),
-                        new RaceResult(race2, d20, 15)
-                		);
+                List<DriverStandings> driverStandings1 = generateDriverStandings(raceResult1, 1);
+                driverStandingsRepo.saveAll(driverStandings1);
+                List<RaceResult> raceResult2 = generateRaceResults(race2, (List<Driver>) driverRepo.findAll(), random);
                 raceResultRepo.saveAll(raceResult2);
-                
-                List<DriverStandings> drivStand2 = new ArrayList<>();
-                for(RaceResult raceResult : raceResult2) {
-                	DriverStandings drivStandings = new DriverStandings(raceResult.getDriver(), raceResult , 2);
-                	drivStandings.calculatePoints();
-                	drivStand2.add(drivStandings);                	
-                }
-                driverStandingsRepo.saveAll(drivStand2);
-                
-                
-                
+                List<DriverStandings> driverStandings2 = generateDriverStandings(raceResult2, 2);
+                driverStandingsRepo.saveAll(driverStandings2);
+
+                List<RaceResult> raceResult3 = generateRaceResults(race3, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult3);
+                List<DriverStandings> driverStandings3 = generateDriverStandings(raceResult3, 3);
+                driverStandingsRepo.saveAll(driverStandings3);
+
+                List<RaceResult> raceResult4 = generateRaceResults(race4, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult4);
+                List<DriverStandings> driverStandings4 = generateDriverStandings(raceResult4, 4);
+                driverStandingsRepo.saveAll(driverStandings4);
+
+                List<RaceResult> raceResult5 = generateRaceResults(race5, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult5);
+                List<DriverStandings> driverStandings5 = generateDriverStandings(raceResult5, 5);
+                driverStandingsRepo.saveAll(driverStandings5);
+
+                List<RaceResult> raceResult6 = generateRaceResults(race6, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult6);
+                List<DriverStandings> driverStandings6 = generateDriverStandings(raceResult6, 6);
+                driverStandingsRepo.saveAll(driverStandings6);
+
+                List<RaceResult> raceResult7 = generateRaceResults(race7, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult7);
+                List<DriverStandings> driverStandings7 = generateDriverStandings(raceResult7, 7);
+                driverStandingsRepo.saveAll(driverStandings7);
+
+                List<RaceResult> raceResult8 = generateRaceResults(race8, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult8);
+                List<DriverStandings> driverStandings8 = generateDriverStandings(raceResult8, 8);
+                driverStandingsRepo.saveAll(driverStandings8);
+
+                List<RaceResult> raceResult9 = generateRaceResults(race9, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult9);
+                List<DriverStandings> driverStandings9 = generateDriverStandings(raceResult9, 9);
+                driverStandingsRepo.saveAll(driverStandings9);
+
+                List<RaceResult> raceResult10 = generateRaceResults(race10, (List<Driver>) driverRepo.findAll(), random);
+                raceResultRepo.saveAll(raceResult10);
+                List<DriverStandings> driverStandings10 = generateDriverStandings(raceResult10, 10);
+                driverStandingsRepo.saveAll(driverStandings10);
             }
+
+            private List<RaceResult> generateRaceResults(Race race, List<Driver> drivers, Random random) {
+                List<RaceResult> raceResults = new ArrayList<>();
+
+                List<Integer> positions = new ArrayList<>();
+                for (int i = 1; i <= drivers.size(); i++)
+                    positions.add(i);
+                Collections.shuffle(positions, random);
+
+                for (Driver driver : drivers) {
+                    int position = positions.get(driver.getIdD() % positions.size());
+                    RaceResult raceResult = new RaceResult(race, driver, position);
+                    raceResults.add(raceResult);
+                }
+                return raceResults;
+            }
+
+            private List<DriverStandings> generateDriverStandings(List<RaceResult> raceResults, int raceNumber) {
+                List<DriverStandings> driverStandings = new ArrayList<>();
+                for (RaceResult raceResult : raceResults) {
+                    DriverStandings standing = new DriverStandings(raceResult.getDriver(), raceResult, raceNumber);
+                    driverStandings.add(standing);
+                }
+                return driverStandings;
+            }
+
+
         };
     }
 }

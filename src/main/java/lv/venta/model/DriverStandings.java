@@ -61,14 +61,14 @@ public class DriverStandings {
         if(position > 0 && position <= pointsPerPosition.length) {
         	points = pointsPerPosition[position - 1];
         	if(position == 1) {
-                wins++;
-                raceResult.getDriver().setWins(wins);
+                if(position == 1) setWins(1);
             }
         }
         if(isFastestLap()) points++;
         
         setPointsPerRace(points);
-        driver.setTotalPoints(driver.getTotalPoints() + points);
+        getDriver().setTotalPoints(getDriver().getTotalPoints() + points);
+        getDriver().setTotalWins(getDriver().getTotalWins() + wins);
 
     }
 }

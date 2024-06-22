@@ -15,4 +15,7 @@ public interface IDriverStandingsRepo extends CrudRepository<DriverStandings, In
 	int sumPointsPerRaceByDriverIdD(int idD);
 
 	List<DriverStandings> findByRaceResultRaceIdR(int raceId);
+
+    @Query("SELECT SUM(ds.wins) FROM DriverStandings ds WHERE ds.driver.idD = :idD")
+    int sumWinsByDriverIdD(int idD);
 }

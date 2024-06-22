@@ -59,25 +59,16 @@
 		  <tr>
 		    <th>Position</th>
 		    <th>Team</th>
-			<th th:each="race, iterStat : ${#numbers.sequence(1, numberOfRaces)}"
-			 <a th:href="@{/standings/team/update/{id}(id=${iterStat.index + 1})}" class="table-link" th:text="${'Race ' + race}"></a>
-		    </th>
-		    <th>Total Points</th>
+			  <th>Total Points</th>
 		  </tr>
 		  </thead>
 		  <tbody>
-		            <tr th:each="teamStanding, index : ${teams}">
-		              <td th:text="${index.index + 1}"></td>
-		              <td th:text="${teamStanding.team.teamName}"></td>
-		              <td th:each="race, iterStat : ${#numbers.sequence(1, numberOfRaces)}">
-		                <span th:each="driver : ${teamStanding.team.drivers}">
-		                  <span th:each="standing : ${driver.driverStandings}"
-		                        th:if="${standing.raceNumber == iterStat.index}"
-		                        th:text="${standing.pointsPerRace}"></span>
-		                </span>
-		    </td>
-		    <td th:text="${teamStanding.points}"></td>
-		  </tr>
+			<tr th:each="teamStanding, index : ${teams}">
+				<td th:text="${index.index + 1}"></td>
+				<td th:text="${teamStanding.team.teamName}"></td>
+				<td th:text="${teamStanding.points}"></td>
+		  	</tr>
+		  </tbody>
 	</table>
 	
 	

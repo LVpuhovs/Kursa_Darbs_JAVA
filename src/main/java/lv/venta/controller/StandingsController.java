@@ -1,5 +1,6 @@
 package lv.venta.controller;
 
+import lv.venta.model.Driver;
 import lv.venta.model.DriverStandings;
 import lv.venta.model.Race;
 import lv.venta.service.IDriverCRUDService;
@@ -12,10 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/standings")
@@ -43,21 +41,21 @@ public class StandingsController {
     public String getDriverStandingsAll(Model model) {
         try {
         	List<DriverStandings> standings = driverStandingsService.getAllDriverStandingsWithRaceResults();
-        	List<Race> races = driverStandingsService.getAllRaces();
+            List<Driver> drivers = crudService.getAllDrivers();
+            List<Race> races = driverStandingsService.getAllRaces();
 
 
-            for (DriverStandings standing : standings) {
-
-
+            for(DriverStandings standing : standings) {
                 int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
-
                 standing.getDriver().setTotalPoints(totalPoints);
-
-
+                standing.getDriver().setTotalWins(driverStandingsService.calculateDriverTotalWinsById(standing.getDriver().getIdD()));
             }
+            driverStandingsService.updateDriverPositions();
+            drivers.sort(Comparator.comparingInt(Driver::getDriverTotalPosition));
 
             model.addAttribute("standings", standings);
             model.addAttribute("races", races);
+            model.addAttribute("drivers", drivers);
 
             return "driver-standings-page";
         } catch (Exception e) {
@@ -69,8 +67,6 @@ public class StandingsController {
 
     @GetMapping("/team/all")
     public String getTeamStandingsAll(Model model) {
-    	int numberOfRaces = 2;
-    	model.addAttribute("numberOfRaces", numberOfRaces);
         try {
         	teamStandingsService.calculateAndUpdateAllTeamPoints();
         	model.addAttribute("teams", teamStandingsService.getAllTeamStandings());
