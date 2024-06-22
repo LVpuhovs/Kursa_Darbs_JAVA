@@ -1,5 +1,6 @@
 package lv.venta.controller;
 
+import lv.venta.model.Driver;
 import lv.venta.model.DriverStandings;
 import lv.venta.model.Race;
 import lv.venta.service.IDriverCRUDService;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,20 +45,18 @@ public class StandingsController {
     public String getDriverStandingsAll(Model model) {
         try {
         	List<DriverStandings> standings = driverStandingsService.getAllDriverStandings();
+        	List<Driver> drivers = crudService.getAllDrivers(); 
         	List<Race> races = driverStandingsService.getAllRaces();
-
-            Map<Integer, DriverStandings> standingsMap = new LinkedHashMap<>();
-
-            for (DriverStandings standing : standings) {
-            	            	
-                int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
+        	
+        	for(DriverStandings standing : standings) {
+        		int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
                 standing.getDriver().setTotalPoints(totalPoints);
-                
-                if (!standingsMap.containsKey(standing.getDriver().getIdD())) //avoid duplicate drivers
-                    standingsMap.put(standing.getDriver().getIdD(), standing);
-                }
+                standing.getDriver().setTotalWins(driverStandingsService.calculateDriverTotalWinsById(standing.getDriver().getIdD()));
+        	}
+        	driverStandingsService.updateDriverPositions();
+        	drivers.sort(Comparator.comparingInt(Driver::getDriverTotalPosition));
 
-            model.addAttribute("standings", standings);
+            model.addAttribute("drivers", drivers);
             model.addAttribute("races", races);
 
             return "driver-standings-page";

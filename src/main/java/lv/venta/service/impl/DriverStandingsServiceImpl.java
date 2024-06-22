@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 @Service
 public class DriverStandingsServiceImpl implements IDriverStandingsService {
@@ -80,6 +81,7 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
                 teamStandingsRepo.save(teamStandings);
             }
         }
+        updateDriverPositions();
     }
 
     @Override
@@ -103,12 +105,15 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
     }
 
 	@Override
-	public int calculateDriverTotalPointsById(int id) throws Exception {
-		return driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);
-		
-		
+	public int calculateDriverTotalPointsById(int id) {
+		return driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);		
 	}
-
+	@Override
+	public int calculateDriverTotalWinsById(int id) {
+		return driverStandingsRepo.sumWinsByDriverIdD(id);
+	}
+	
+	
 	@Override
 	public List<DriverStandings> getDriverStandingsByRaceId(int raceId) {
 		return driverStandingsRepo.findByRaceResultRaceIdR(raceId);
@@ -120,4 +125,18 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 	        standing.setRaceResult(raceResultRepo.findByDriverStandings(standing));
 	    return standings;
 	}
+
+
+	@Override
+	public void updateDriverPositions() {
+		List<Driver> drivers = (List<Driver>) driverRepo.findAll();
+		drivers.sort((d1, d2) -> Integer.compare(d2.getTotalPoints(), d1.getTotalPoints()));
+		
+		for(int i = 0; i < drivers.size(); i++)
+			drivers.get(i).setDriverTotalPosition(i + 1);
+		driverRepo.saveAll(drivers);
+	}
+
+
+	
 }

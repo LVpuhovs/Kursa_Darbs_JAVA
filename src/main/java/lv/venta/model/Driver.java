@@ -49,6 +49,14 @@ public class Driver {
     @Column(name = "TotalPoints")
     private int totalPoints;
     
+    @Min(0)
+    @Column(name = "DriverTotalPosition")
+    private int driverTotalPosition;
+    
+    @Min(0)
+    @Column(name = "TotalWins")
+    private int totalWins;
+    
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<RaceResult> raceResults;
 
