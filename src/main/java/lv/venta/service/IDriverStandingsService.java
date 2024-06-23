@@ -10,14 +10,18 @@ import java.util.List;
 public interface IDriverStandingsService {
     ArrayList<DriverStandings> getAllDriverStandings();
     ArrayList<Race> getAllRaces();
+    Race getRaceById(int id);
     DriverStandings getDriverStandingsById(int id) throws Exception;
     void updateDriverStanding(int id, DriverStandings driverStandings) throws Exception;
     void deleteDriverStanding(int id) throws Exception;
     
-    int calculateDriverTotalPointsById(int id) throws Exception;
+    int calculateDriverTotalPointsById(int id);
 	void addRaceResult(Race race, RaceResult raceResult);
 	
 	List<DriverStandings> getDriverStandingsByRaceId(int raceId);
 	List<DriverStandings> getAllDriverStandingsWithRaceResults();
+	
+	void updateDriverPositions();
+	int calculateDriverTotalWinsById(int id);
 
 }

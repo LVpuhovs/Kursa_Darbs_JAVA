@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 @Service
 public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
@@ -80,18 +82,23 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
                 teamStandingsRepo.save(teamStandings);
             }
         }
+        updateDriverPositions();
     }
 
     @Override
-    public void updateDriverStanding(int id, DriverStandings driverStandings) throws Exception {    	
-        DriverStandings existingDriverStandings = driverStandingsRepo.findById(id).orElse(null);
-        if (existingDriverStandings != null) {
-            existingDriverStandings.setDriver(driverStandings.getDriver());
-            existingDriverStandings.setPointsPerRace(driverStandings.getPointsPerRace());
+    public void updateDriverStanding(int id, DriverStandings updatedDriverStandings) throws Exception {
+        Optional<DriverStandings> optionalDriverStandings = Optional.of(getDriverStandingsById(id));
+        
+        if (optionalDriverStandings.isPresent()) {
+            DriverStandings existingDriverStandings = optionalDriverStandings.get();
+            // Perform update on existingDriverStandings with updatedDriverStandings
+            existingDriverStandings.getRaceResult().setPosition(updatedDriverStandings.getRaceResult().getPosition());
+            existingDriverStandings.setPointsPerRace(updatedDriverStandings.getPointsPerRace());
+            // Save the updated driver standings
             driverStandingsRepo.save(existingDriverStandings);
-        } else
-            throw new Exception("Driver standings not found with id: " + id);
-
+        } else {
+            throw new IllegalArgumentException("Driver standings with ID " + id + " not found.");
+        }
     }
 
     @Override
@@ -103,12 +110,15 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
     }
 
 	@Override
-	public int calculateDriverTotalPointsById(int id) throws Exception {
-		return driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);
-		
-		
+	public int calculateDriverTotalPointsById(int id) {
+		return driverStandingsRepo.sumPointsPerRaceByDriverIdD(id);		
 	}
-
+	@Override
+	public int calculateDriverTotalWinsById(int id) {
+		return driverStandingsRepo.sumWinsByDriverIdD(id);
+	}
+	
+	
 	@Override
 	public List<DriverStandings> getDriverStandingsByRaceId(int raceId) {
 		return driverStandingsRepo.findByRaceResultRaceIdR(raceId);
@@ -120,4 +130,24 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 	        standing.setRaceResult(raceResultRepo.findByDriverStandings(standing));
 	    return standings;
 	}
+
+
+	@Override
+	public void updateDriverPositions() {
+		List<Driver> drivers = (List<Driver>) driverRepo.findAll();
+		drivers.sort((d1, d2) -> Integer.compare(d2.getTotalPoints(), d1.getTotalPoints()));
+		
+		for(int i = 0; i < drivers.size(); i++)
+			drivers.get(i).setDriverTotalPosition(i + 1);
+		driverRepo.saveAll(drivers);
+	}
+
+
+
+	@Override
+	public Race getRaceById(int id) {
+		return raceRepo.findById(id).get();
+	}
+		
+	
 }

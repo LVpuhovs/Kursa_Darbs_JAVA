@@ -53,21 +53,22 @@
         </ul>
     </div>
 </nav>
-<h1>Update Driver Standings</h1>
-<form action="#" th:action="@{/standings/driver/update/{id}(id=${driverStandings.idDS})}" method="post" th:object="${driverStandings}">
-    <input type="hidden" name="id" th:value="${driverStandings.idDS}">
+<h1>Update Driver Positions</h1>
+<form th:action="@{/standings/driver/update/race/{id}(id=${id})}" method="post" th:object="${race}" >
     <table>
         <thead>
         <tr>
-            <th>Race Number</th>
+            <th>Driver</th>
             <th>Position</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="raceResult, idx : ${driverStandings.raceResult}">
-            <td th:text="${idx.index + 1}"></td>
-            <td><input type="text" th:field="*{raceResult[__${idx.index}__]}"/></td>
-        </tr>
+			<tr th:each="raceResult, stat : *{raceResults}">
+			    <td th:text="${raceResult.driver.name} + ' ' + ${raceResult.driver.surname} + ' ' + ${raceResult.driver.number}"></td>
+			    <td><input type="number" th:field="*{raceResults[__${stat.index}__].position}" /></td>
+			    <td th:if="${#fields.hasErrors('raceResults[__${stat.index}__].position')}" th:errors="*{raceResults[__${stat.index}__].position}">Position Error </td>
+			</tr>
+
         </tbody>
     </table>
     <button type="submit">Update</button>

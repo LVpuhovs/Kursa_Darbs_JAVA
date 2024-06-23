@@ -1,7 +1,11 @@
 package lv.venta.controller;
 
+import lv.venta.model.Driver;
 import lv.venta.model.DriverStandings;
 import lv.venta.model.Race;
+import lv.venta.model.RaceResult;
+import lv.venta.model.Team;
+import lv.venta.model.TeamStandings;
 import lv.venta.service.IDriverCRUDService;
 import lv.venta.service.IDriverStandingsService;
 import lv.venta.service.ITeamService;
@@ -12,10 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import jakarta.validation.Valid;
+
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/standings")
@@ -42,21 +46,18 @@ public class StandingsController {
     @GetMapping("/driver/all")
     public String getDriverStandingsAll(Model model) {
         try {
-        	List<DriverStandings> standings = driverStandingsService.getAllDriverStandings();
+        	List<Driver> drivers = crudService.getAllDrivers(); 
         	List<Race> races = driverStandingsService.getAllRaces();
-
-            Map<Integer, DriverStandings> standingsMap = new LinkedHashMap<>();
-
-            for (DriverStandings standing : standings) {
-            	            	
-                int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
+        	
+        	for(DriverStandings standing : driverStandingsService.getAllDriverStandings()) {
+        		int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
                 standing.getDriver().setTotalPoints(totalPoints);
-                
-                if (!standingsMap.containsKey(standing.getDriver().getIdD())) //avoid duplicate drivers
-                    standingsMap.put(standing.getDriver().getIdD(), standing);
-                }
+                standing.getDriver().setTotalWins(driverStandingsService.calculateDriverTotalWinsById(standing.getDriver().getIdD()));
+        	}
+        	driverStandingsService.updateDriverPositions();
+        	drivers.sort(Comparator.comparingInt(Driver::getDriverTotalPosition));
 
-            model.addAttribute("standings", standings);
+            model.addAttribute("drivers", drivers);
             model.addAttribute("races", races);
 
             return "driver-standings-page";
@@ -69,11 +70,19 @@ public class StandingsController {
 
     @GetMapping("/team/all")
     public String getTeamStandingsAll(Model model) {
-    	int numberOfRaces = 2;
-    	model.addAttribute("numberOfRaces", numberOfRaces);
         try {
-        	teamStandingsService.calculateAndUpdateAllTeamPoints();
-        	model.addAttribute("teams", teamStandingsService.getAllTeamStandings());
+        	List<Team> teams = teamService.getAllTeams();
+        	List<Race> races = driverStandingsService.getAllRaces();
+        	
+        	for(TeamStandings standing : teamStandingsService.getAllTeamStandings()) {
+        		int totalPoints = teamStandingsService.calculateTeamTotalPointsById(standing.getTeam().getIdT());
+        		standing.calculateTeamPoints();
+        		standing.getTeam().setTotalTeamPoints(totalPoints);
+        	}
+        	teamStandingsService.updateTeamPositions();
+        	teams.sort(Comparator.comparingInt(Team::getTeamTotalPosition));
+        	model.addAttribute("teams", teams);
+        	model.addAttribute("races", races);
             return "team-standings-page";
         	
         } catch (Exception e) {
@@ -81,11 +90,18 @@ public class StandingsController {
             return "error-page";
         }
     }
-
-    @GetMapping("/driver/update/{id}")
-    public String getDriverStandingsUpdate(@PathVariable("id") int id, Model model){
+    
+	@GetMapping("/driver/update/race/{id}")
+    public String getDriverStandingsFromRaceUpdate(@PathVariable("id") int id, Model model){
         try {
-            model.addAttribute("driverStandings", driverStandingsService.getDriverStandingsById(id));
+        	Race race = driverStandingsService.getRaceById(id);
+        	  if (race == null) {
+                  throw new Exception("Race not found with id: " + id);
+              }
+        	
+            model.addAttribute("race", race);
+            model.addAttribute("raceResults", race.getRaceResults());
+            model.addAttribute("id", id);  //raceId
             return "update-driver-standings-page";
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage());
@@ -94,17 +110,27 @@ public class StandingsController {
 
     }
 
-    @PostMapping("/driver/update/{id}")
-    public String postDriverStandingsUpdate(@PathVariable("id") int id, @ModelAttribute("driverStandings") DriverStandings updatedDriverStandings, BindingResult result) {
+    @PostMapping("/driver/update/race/{id}")
+    public String postDriverStandingsFromRaceUpdate(@PathVariable("id") int id, @Valid @ModelAttribute("race") Race race, BindingResult result, Model model) {
         if (result.hasErrors()) {
+        	model.addAttribute("id", id);
             return "update-driver-standings-page";
         } else {
             try {
-                driverStandingsService.updateDriverStanding(id, updatedDriverStandings);
+            	 for (int i = 0; i < race.getRaceResults().size(); i++) {
+                     driverStandingsService.updateDriverStanding(i, race.getRaceResults().get(id).getDriverStandings());
+                 }
+                
                 return "redirect:/standings/driver/all";
             } catch (Exception e) {
+            	model.addAttribute("msg", e.getMessage());
                 return "error-page";
             }
         }
     }
+    
+    @GetMapping("/error")  //localhost:8080/error
+	public String getError() {
+		return "error-page";
+	}
 }

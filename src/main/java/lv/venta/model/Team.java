@@ -1,6 +1,7 @@
 package lv.venta.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -36,8 +37,16 @@ public class Team{
     @JoinColumn(name = "driver2_id", referencedColumnName = "IdD")
     private Driver driver2;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private Collection<TeamStandings> teamStandings;
+    
+    @Min(0)
+    @Column(name = "TotalTeamPoints")
+    private int totalTeamPoints;
+    
+    @Min(0)
+    @Column(name = "TeamTotalPosition")
+    private int teamTotalPosition;
 
     public Team(String teamName, Driver driver1, Driver driver2) {
         setTeamName(teamName);
