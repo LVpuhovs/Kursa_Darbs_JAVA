@@ -60,7 +60,7 @@ public class Driver {
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<RaceResult> raceResults;
 
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<DriverStandings> driverStandings;
 
     public Driver(String name, String surname, int number){

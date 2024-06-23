@@ -59,26 +59,26 @@
 		  <tr>
 		    <th>Position</th>
 		    <th>Team</th>
-			<th th:each="race, iterStat : ${#numbers.sequence(1, numberOfRaces)}"
-			 <a th:href="@{/standings/team/update/{id}(id=${iterStat.index + 1})}" class="table-link" th:text="${'Race ' + race}"></a>
+			<th th:each="race : ${races}">
+					<a th:href="@{/standings/team/update/race/{id}(id=${race.idR})}" class="table-link" th:text="${race.raceName}"></a>
 		    </th>
 		    <th>Total Points</th>
 		  </tr>
 		  </thead>
 		  <tbody>
-		            <tr th:each="teamStanding, index : ${teams}">
-		              <td th:text="${index.index + 1}"></td>
-		              <td th:text="${teamStanding.team.teamName}"></td>
-		              <td th:each="race, iterStat : ${#numbers.sequence(1, numberOfRaces)}">
-		                <span th:each="driver : ${teamStanding.team.drivers}">
-		                  <span th:each="standing : ${driver.driverStandings}"
-		                        th:if="${standing.raceNumber == iterStat.index}"
-		                        th:text="${standing.pointsPerRace}"></span>
-		                </span>
-		    </td>
-		    <td th:text="${teamStanding.points}"></td>
-		  </tr>
-	</table>
-	
-	
-</body>
+		            <tr th:each="team : ${teams}">
+		              <td th:text="${team.teamTotalPosition}"></td>
+		              <td th:text="${team.teamName}"></td>
+					  
+					  <td th:each="race : ${races}">
+						<span th:each="standing : ${team.teamStandings}">
+						                    <span th:if="${standing.race.idR == race.idR}">
+						                        <span th:text="${standing.points}"></span>
+					                 </td>
+
+					    <td th:text="${team.totalTeamPoints}"></td>
+					        </tr>
+					      </tbody>
+					  </table>
+					   </body>
+					   </html>

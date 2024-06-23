@@ -25,6 +25,10 @@ public class Race {
 
     @OneToMany(mappedBy = "race", cascade = CascadeType.ALL)
     private List<RaceResult> raceResults;
+    
+    @OneToMany(mappedBy = "race", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<TeamStandings> teamStandings;
 
     public Race(String raceName) {
         setRaceName(raceName);
