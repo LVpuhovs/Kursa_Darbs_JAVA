@@ -38,11 +38,11 @@ public class Team{
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private Collection<TeamStandings> teamStandings;
-
+    
     @Min(0)
     @Column(name = "TotalTeamPoints")
     private int totalTeamPoints;
-
+    
     @Min(0)
     @Column(name = "TeamTotalPosition")
     private int teamTotalPosition;
