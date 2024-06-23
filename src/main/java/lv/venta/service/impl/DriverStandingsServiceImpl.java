@@ -1,5 +1,6 @@
 package lv.venta.service.impl;
 
+import jakarta.transaction.Transactional;
 import lv.venta.model.*;
 import lv.venta.repo.IDriverRepo;
 import lv.venta.repo.IDriverStandingsRepo;
@@ -84,19 +85,24 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
     }
 
     @Override
+    @Transactional
     public void updateDriverStanding(int id, DriverStandings updatedDriverStandings) throws Exception {
         Optional<DriverStandings> optionalDriverStandings = Optional.of(getDriverStandingsById(id));
 
         if (optionalDriverStandings.isPresent()) {
             DriverStandings existingDriverStandings = optionalDriverStandings.get();
-            // Perform update on existingDriverStandings with updatedDriverStandings
+
+
             existingDriverStandings.getRaceResult().setPosition(updatedDriverStandings.getRaceResult().getPosition());
             existingDriverStandings.setPointsPerRace(updatedDriverStandings.getPointsPerRace());
-            // Save the updated driver standings
-            driverStandingsRepo.save(existingDriverStandings);
-        } else
-            throw new IllegalArgumentException("Driver standings with ID " + id + " not found.");
 
+            driverStandingsRepo.save(existingDriverStandings);
+
+
+
+        } else {
+            throw new IllegalArgumentException("Driver standings with ID " + id + " not found.");
+        }
     }
 
     @Override

@@ -39,12 +39,11 @@ public class StandingsController {
     @GetMapping("/driver/all")
     public String getDriverStandingsAll(Model model) {
         try {
-        	List<DriverStandings> standings = driverStandingsService.getAllDriverStandingsWithRaceResults();
+            List<DriverStandings> standings = driverStandingsService.getAllDriverStandingsWithRaceResults();
             List<Driver> drivers = crudService.getAllDrivers();
             List<Race> races = driverStandingsService.getAllRaces();
 
-
-            for(DriverStandings standing : standings) {
+            for (DriverStandings standing : standings) {
                 int totalPoints = driverStandingsService.calculateDriverTotalPointsById(standing.getDriver().getIdD());
                 standing.getDriver().setTotalPoints(totalPoints);
                 standing.getDriver().setTotalWins(driverStandingsService.calculateDriverTotalWinsById(standing.getDriver().getIdD()));
@@ -70,7 +69,7 @@ public class StandingsController {
             List<Team> teams = teamService.getAllTeams();
             List<Race> races = driverStandingsService.getAllRaces();
 
-            for(TeamStandings standing : teamStandingsService.getAllTeamStandings()) {
+            for (TeamStandings standing : teamStandingsService.getAllTeamStandings()) {
                 int totalPoints = teamStandingsService.calculateTeamTotalPointsById(standing.getTeam().getIdT());
                 standing.calculateTeamPoints();
                 standing.getTeam().setTotalTeamPoints(totalPoints);
@@ -113,10 +112,11 @@ public class StandingsController {
             return "update-driver-standings-page";
         } else {
             try {
-                for (int i = 0; i < race.getRaceResults().size(); i++) {
-                    driverStandingsService.updateDriverStanding(i, race.getRaceResults().get(id).getDriverStandings());
+                for (RaceResult raceResult : race.getRaceResults()) {
+                    driverStandingsService.updateDriverStanding(raceResult.getDriverStandings().getIdDS(), raceResult.getDriverStandings());
                 }
-                return "driver-standings-page";
+                teamStandingsService.updateTeamPositions();
+                return "redirect:/standings/driver/all";
             } catch (Exception e) {
                 model.addAttribute("msg", e.getMessage());
                 return "error-page";

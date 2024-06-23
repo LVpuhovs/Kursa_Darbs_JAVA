@@ -11,7 +11,7 @@ public interface ITeamStandingsService {
     void updateTeamStanding(int id, TeamStandings teamStandings) throws Exception;
     void deleteTeamStanding(int id) throws Exception;
     void calculateAndUpdateAllTeamPoints();
-
+    void updateTeamPointsByDriver(int driverId);
     int calculateTeamTotalPointsById(int id);
     void updateTeamPositions();
 }

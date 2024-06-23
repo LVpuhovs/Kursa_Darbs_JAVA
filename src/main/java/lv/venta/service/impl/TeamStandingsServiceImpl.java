@@ -1,7 +1,9 @@
 package lv.venta.service.impl;
 
+import lv.venta.model.Driver;
 import lv.venta.model.Team;
 import lv.venta.model.TeamStandings;
+import lv.venta.repo.IDriverRepo;
 import lv.venta.repo.ITeamRepo;
 import lv.venta.repo.ITeamStandingsRepo;
 import lv.venta.service.ITeamStandingsService;
@@ -18,6 +20,9 @@ public class TeamStandingsServiceImpl implements ITeamStandingsService {
 
     @Autowired
     private ITeamRepo teamRepo;
+
+    @Autowired
+    private IDriverRepo driverRepo;
 
     @Override
     public ArrayList<TeamStandings> getAllTeamStandings() {
@@ -64,6 +69,17 @@ public class TeamStandingsServiceImpl implements ITeamStandingsService {
     		teamStand.calculateTeamPoints();
     		teamStandingsRepo.save(teamStand);
     	}
+    }
+
+    @Override
+    public void updateTeamPointsByDriver(int driverId) {
+        Driver driver = driverRepo.findById(driverId).orElse(null);
+        if (driver != null && driver.getTeam() != null) {
+            Team team = driver.getTeam();
+            int totalTeamPoints = calculateTeamTotalPointsById(team.getIdT());
+            team.setTotalTeamPoints(totalTeamPoints);
+            teamRepo.save(team);
+        }
     }
 
     @Override
