@@ -70,6 +70,7 @@ public class TeamController {
     @PostMapping("/update/{id}")
     public String postTeamUpdate(@PathVariable("id") int id, @Valid Team team, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("id", id);
             return "update-team-page";
         }else {
             try {

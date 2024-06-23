@@ -1,10 +1,6 @@
 package lv.venta;
 
-import lv.venta.model.Driver;
-import lv.venta.model.DriverStandings;
-import lv.venta.model.Race;
-import lv.venta.model.RaceResult;
-import lv.venta.model.Team;
+import lv.venta.model.*;
 import lv.venta.repo.IDriverRepo;
 import lv.venta.repo.IDriverStandingsRepo;
 import lv.venta.repo.IRaceRepo;
@@ -170,6 +166,15 @@ public class F1WebJavaApplication {
                 raceResultRepo.saveAll(raceResult10);
                 List<DriverStandings> driverStandings10 = generateDriverStandings(raceResult10, 10);
                 driverStandingsRepo.saveAll(driverStandings10);
+
+                List<Race> races = (List<Race>) raceRepo.findAll();
+                List<Team> teams = (List<Team>) teamRepo.findAll();
+                for(Race race : races) {
+                    for(Team team : teams) {
+                        TeamStandings teamStandings = new TeamStandings(team, race);
+                        teamStandingsRepo.save(teamStandings);
+                    }
+                }
             }
 
             private List<RaceResult> generateRaceResults(Race race, List<Driver> drivers, Random random) {

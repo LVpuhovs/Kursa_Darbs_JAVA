@@ -53,7 +53,7 @@ public class Driver {
     @Column(name = "Wins")
     private int wins;
 
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<DriverStandings> driverStandings;
 
     @Min(0)

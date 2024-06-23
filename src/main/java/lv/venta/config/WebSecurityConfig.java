@@ -15,7 +15,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class webSecurityConfig extends WebSecurityConfiguration {
+public class WebSecurityConfig extends WebSecurityConfiguration {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
     @Bean
     public UserDetailsService testUser() {
@@ -65,7 +70,7 @@ public class webSecurityConfig extends WebSecurityConfiguration {
                         .requestMatchers("/team/update/**").hasAuthority("ADMIN")
                         .requestMatchers("/team/delete/**").hasAuthority("ADMIN")
                         .requestMatchers("/standings/all").permitAll()
-                        .requestMatchers("/standings/driver/all").permitAll()
+                        .requestMatchers("/standings/driver/update/race/**").hasAuthority("ADMIN")
                         .requestMatchers("/standings/team/all").permitAll()
                         .requestMatchers("/h2-console/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()

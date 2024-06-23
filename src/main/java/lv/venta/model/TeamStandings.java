@@ -25,21 +25,33 @@ public class TeamStandings {
     @Min(0)
     private int points;
 
-    public TeamStandings(Team team) {
+    @ManyToOne
+    @ToString.Exclude
+    private Race race;
+
+    public TeamStandings(Team team, Race race) {
         setTeam(team);
+        setRace(race);
         calculateTeamPoints();
     }
     
     public void calculateTeamPoints() {
-    	int totalPoints = 0;
-    	if(team.getDriver1() != null) {
-    		for(DriverStandings standings : team.getDriver1().getDriverStandings())
-    			totalPoints += standings.getPointsPerRace();
-    	}
-    	if(team.getDriver2() != null) {
-    		for(DriverStandings standings : team.getDriver2().getDriverStandings())
-    			totalPoints += standings.getPointsPerRace();
-    	}
-    	setPoints(totalPoints);
+        int teamPoints = 0;
+
+        if (team.getDriver1() != null) {
+            for (DriverStandings standings : team.getDriver1().getDriverStandings()) {
+                if (standings.getRaceResult().getRace().equals(race))
+                    teamPoints += standings.getPointsPerRace();
+            }
+        }
+
+        if (team.getDriver2() != null) {
+            for (DriverStandings standings : team.getDriver2().getDriverStandings()) {
+                if (standings.getRaceResult().getRace().equals(race))
+                    teamPoints += standings.getPointsPerRace();
+            }
+        }
+        setPoints(teamPoints);
+        getTeam().setTotalTeamPoints(getTeam().getTotalTeamPoints() + teamPoints);
     }
 }

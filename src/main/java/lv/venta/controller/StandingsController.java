@@ -1,8 +1,7 @@
 package lv.venta.controller;
 
-import lv.venta.model.Driver;
-import lv.venta.model.DriverStandings;
-import lv.venta.model.Race;
+import jakarta.validation.Valid;
+import lv.venta.model.*;
 import lv.venta.service.IDriverCRUDService;
 import lv.venta.service.IDriverStandingsService;
 import lv.venta.service.ITeamService;
@@ -68,8 +67,18 @@ public class StandingsController {
     @GetMapping("/team/all")
     public String getTeamStandingsAll(Model model) {
         try {
-        	teamStandingsService.calculateAndUpdateAllTeamPoints();
-        	model.addAttribute("teams", teamStandingsService.getAllTeamStandings());
+            List<Team> teams = teamService.getAllTeams();
+            List<Race> races = driverStandingsService.getAllRaces();
+
+            for(TeamStandings standing : teamStandingsService.getAllTeamStandings()) {
+                int totalPoints = teamStandingsService.calculateTeamTotalPointsById(standing.getTeam().getIdT());
+                standing.calculateTeamPoints();
+                standing.getTeam().setTotalTeamPoints(totalPoints);
+            }
+            teamStandingsService.updateTeamPositions();
+            teams.sort(Comparator.comparingInt(Team::getTeamTotalPosition));
+            model.addAttribute("teams", teams);
+            model.addAttribute("races", races);;
             return "team-standings-page";
         	
         } catch (Exception e) {
@@ -78,10 +87,17 @@ public class StandingsController {
         }
     }
 
-    @GetMapping("/driver/update/{id}")
+    @GetMapping("/driver/update/race/{id}")
     public String getDriverStandingsUpdate(@PathVariable("id") int id, Model model){
         try {
-            model.addAttribute("driverStandings", driverStandingsService.getDriverStandingsById(id));
+            Race race = driverStandingsService.getRaceById(id);
+            if (race == null) {
+                throw new Exception("Race not found with id: " + id);
+            }
+
+            model.addAttribute("race", race);
+            model.addAttribute("raceResults", race.getRaceResults());
+            model.addAttribute("id", id);
             return "update-driver-standings-page";
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage());
@@ -90,17 +106,26 @@ public class StandingsController {
 
     }
 
-    @PostMapping("/driver/update/{id}")
-    public String postDriverStandingsUpdate(@PathVariable("id") int id, @ModelAttribute("driverStandings") DriverStandings updatedDriverStandings, BindingResult result) {
+    @PostMapping("/driver/update/race/{id}")
+    public String postDriverStandingsFromRaceUpdate(@PathVariable("id") int id, @Valid @ModelAttribute("race") Race race, BindingResult result, Model model) {
         if (result.hasErrors()) {
+
             return "update-driver-standings-page";
         } else {
             try {
-                driverStandingsService.updateDriverStanding(id, updatedDriverStandings);
-                return "redirect:/standings/driver/all";
+                for (int i = 0; i < race.getRaceResults().size(); i++) {
+                    driverStandingsService.updateDriverStanding(i, race.getRaceResults().get(id).getDriverStandings());
+                }
+                return "driver-standings-page";
             } catch (Exception e) {
+                model.addAttribute("msg", e.getMessage());
                 return "error-page";
             }
         }
+    }
+
+    @GetMapping("/error")  //localhost:8080/error
+    public String getError() {
+        return "error-page";
     }
 }

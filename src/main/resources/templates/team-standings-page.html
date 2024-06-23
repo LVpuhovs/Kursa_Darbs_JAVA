@@ -59,17 +59,28 @@
 		  <tr>
 		    <th>Position</th>
 		    <th>Team</th>
+			  <th th:each="race : ${races}">
+				  <a th:href="@{/standings/team/update/race/{id}(id=${race.idR})}" class="table-link" th:text="${race.raceName}"></a>
+			  </th>
 			  <th>Total Points</th>
 		  </tr>
 		  </thead>
 		  <tbody>
-			<tr th:each="teamStanding, index : ${teams}">
-				<td th:text="${index.index + 1}"></td>
-				<td th:text="${teamStanding.team.teamName}"></td>
-				<td th:text="${teamStanding.points}"></td>
-		  	</tr>
+		  <tr th:each="team : ${teams}">
+			  <td th:text="${team.teamTotalPosition}"></td>
+			  <td th:text="${team.teamName}"></td>
+
+			  <td th:each="race : ${races}">
+				  <span th:each="standing : ${team.teamStandings}">
+					  <span th:if="${standing.race.idR == race.idR}">
+						  <span th:text="${standing.points}"></span>
+					  </span>
+				  </span>
+			  </td>
+
+			  <td th:text="${team.totalTeamPoints}"></td>
+		  </tr>
 		  </tbody>
 	</table>
-	
-	
 </body>
+</html>
