@@ -17,7 +17,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "UserAuthorityTable")
 public class MyUser {
     @Column(name = "Idu")
     @Id

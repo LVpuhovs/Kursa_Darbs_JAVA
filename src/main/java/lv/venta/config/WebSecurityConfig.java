@@ -77,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
                         .requestMatchers("styles.css").permitAll()
                         .requestMatchers("driver/create.css").permitAll()
                         .requestMatchers("/error").permitAll()
+
                 );
 
         http.formLogin(form -> form.permitAll());
