@@ -30,7 +30,7 @@ public class DriverCRUDController {
                 crudService.createDriver(driver);
                 return "redirect:/driver/all";
             } catch (Exception e) {
-                return "error-page";
+                return "redirect:/error";
             }
         }
     }
@@ -70,8 +70,7 @@ public class DriverCRUDController {
                 crudService.updateDriverById(id, driver);
                 return "redirect:/driver/all";
             } catch (Exception e) {
-            	model.addAttribute("msg", e.getMessage());
-    			return "error-page";
+            	return "redirect:/error";
     		}
         }
     }
@@ -84,8 +83,7 @@ public class DriverCRUDController {
             model.addAttribute("mylist", crudService.getAllDrivers());
             return "redirect:/driver/all";
         } catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			return "error-page";
+			return "redirect:/error";
 		}
     }
 

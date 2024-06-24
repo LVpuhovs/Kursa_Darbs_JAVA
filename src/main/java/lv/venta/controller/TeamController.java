@@ -77,8 +77,7 @@ public class TeamController {
                 teamService.updateTeam(id, team);
                 return "redirect:/team/all";
             } catch (Exception e) {
-                model.addAttribute("msg", e.getMessage());
-                return "error-page";
+                return "redirect:/error";
             }
         }
     }
@@ -91,8 +90,7 @@ public class TeamController {
             model.addAttribute("mylist", teamService.getAllTeams());
             return "redirect:/team/all";
         } catch (Exception e) {
-            model.addAttribute("msg", e.getMessage());
-            return "error-page";
+            return "redirect:/error";
         }
     }
 }

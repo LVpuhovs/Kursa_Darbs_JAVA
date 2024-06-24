@@ -116,14 +116,8 @@ public class StandingsController {
                 teamStandingsService.updateTeamPositions();
                 return "redirect:/standings/driver/all";
             } catch (Exception e) {
-                model.addAttribute("msg", e.getMessage());
-                return "error-page";
+                return "redirect:/error";
             }
         }
-    }
-
-    @GetMapping("/error")  //localhost:8080/error
-    public String getError() {
-        return "error-page";
     }
 }
