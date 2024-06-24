@@ -61,12 +61,14 @@
         <tr>
             <th>Driver</th>
             <th>Position</th>
+			<th>Fastest Lap?</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="raceResult, stat : ${raceResults}">
             <td th:text="${raceResult.driver.name} + ' ' + ${raceResult.driver.surname} + ' ' + ${raceResult.driver.number}"></td>
             <td><input type="number" th:field="*{raceResults[__${stat.index}__].position}" /></td>
+			<td><input type="radio" th:field="*{raceResults[__${stat.index}__].driverStandings.fastestLap}" value="true"/></td>
             <td th:if="${#fields.hasErrors('raceResults[__${stat.index}__].position')}" th:errors="*{raceResults[__${stat.index}__].position}">Position Error </td>
         </tr>
 
