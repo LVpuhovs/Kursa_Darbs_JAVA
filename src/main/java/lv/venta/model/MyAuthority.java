@@ -15,7 +15,7 @@ import java.util.Collection;
 @Table(name = "AuthorityTable")
 
 @Entity
-public class MyAuthority {
+public class MyAuthority{
     @Column(name =  "Ida")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -71,8 +71,9 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
                         .requestMatchers("/team/delete/**").hasAuthority("ADMIN")
                         .requestMatchers("/standings/all").permitAll()
                         .requestMatchers("/standings/driver/update/race/**").hasAuthority("ADMIN")
-                        .requestMatchers("/standings/team/all").permitAll()
                         .requestMatchers("/h2-console/**").hasAuthority("ADMIN")
+                        .requestMatchers("/styles.css").permitAll()
+                        .requestMatchers("/driver/create.css").permitAll()
                 );
 
         http.formLogin(form -> form.permitAll());

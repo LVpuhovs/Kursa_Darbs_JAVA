@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,7 +39,7 @@ public class Team{
     private Driver driver2;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private Collection<TeamStandings> teamStandings;
+    private List<TeamStandings> teamStandings = new ArrayList<>();
 
     @Min(0)
     @Column(name = "TotalTeamPoints")
