@@ -32,7 +32,7 @@ public class TeamStandingsServiceImpl implements ITeamStandingsService {
     @Override
     public TeamStandings getTeamStandingById(int id) throws Exception {
     	if(id < 0) throw new Exception("Wrong Input - Id should be positive!");
-        return teamStandingsRepo.findById(id).get();
+        return teamStandingsRepo.findById(id).orElse(null);
     }
 
     @Override

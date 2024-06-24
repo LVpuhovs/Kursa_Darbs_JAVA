@@ -141,6 +141,6 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
     @Override
     public Race getRaceById(int id) {
-        return raceRepo.findById(id).get();
+        return raceRepo.findById(id).orElse(null);
     }
 }

@@ -62,7 +62,7 @@ public class TeamServiceImpl implements ITeamService {
         Driver newDriver1 = team.getDriver1();
         Driver newDriver2 = team.getDriver2();
         
-        if(newDriver1 != null && newDriver2 != null && newDriver1.equals(newDriver2)) throw new Exception("Both drivers can't be the same");
+        if(newDriver1 != null && newDriver1.equals(newDriver2)) throw new Exception("Both drivers can't be the same");
         
         existingTeam.setDriver1(newDriver1);
         existingTeam.setDriver2(newDriver2);
@@ -70,11 +70,11 @@ public class TeamServiceImpl implements ITeamService {
 
         teamRepo.save(existingTeam);
 
-        if (newDriver1 != null && (replacedDriver1 == null || !newDriver1.equals(replacedDriver1))) {
+        if (newDriver1 != null && !newDriver1.equals(replacedDriver1)) {
             newDriver1.setTeam(existingTeam);
             driverRepo.save(newDriver1);
         }
-        if (newDriver2 != null && (replacedDriver2 == null || !newDriver2.equals(replacedDriver2))) {
+        if (newDriver2 != null && !newDriver2.equals(replacedDriver2)) {
             newDriver2.setTeam(existingTeam);
             driverRepo.save(newDriver2);
         }

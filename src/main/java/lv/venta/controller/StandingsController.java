@@ -73,6 +73,7 @@ public class StandingsController {
                 standing.calculateTeamPoints();
                 standing.getTeam().setTotalTeamPoints(totalPoints);
             }
+            
             teamStandingsService.updateTeamPositions();
             teams.sort(Comparator.comparingInt(Team::getTeamTotalPosition));
             model.addAttribute("teams", teams);
