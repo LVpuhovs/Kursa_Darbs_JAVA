@@ -69,7 +69,7 @@ public class DriverCRUDServiceImpl implements IDriverCRUDService {
     @Override
     public Driver getDriverById(int id) throws Exception {
     	if(id < 0) throw new Exception("Wrong Input - Id should be positive!");
-        return driverRepo.findById(id).get();
+        return driverRepo.findById(id).orElse(null);
     }
 
     @Override

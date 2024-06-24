@@ -60,7 +60,6 @@ public class StandingsController {
             model.addAttribute("msg", e.getMessage());
             return "error-page";
         }
-        
     }
 
     @GetMapping("/team/all")
@@ -74,12 +73,12 @@ public class StandingsController {
                 standing.calculateTeamPoints();
                 standing.getTeam().setTotalTeamPoints(totalPoints);
             }
+            
             teamStandingsService.updateTeamPositions();
             teams.sort(Comparator.comparingInt(Team::getTeamTotalPosition));
             model.addAttribute("teams", teams);
             model.addAttribute("races", races);;
             return "team-standings-page";
-        	
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage());
             return "error-page";
@@ -90,9 +89,8 @@ public class StandingsController {
     public String getDriverStandingsUpdate(@PathVariable("id") int id, Model model){
         try {
             Race race = driverStandingsService.getRaceById(id);
-            if (race == null) {
+            if (race == null) 
                 throw new Exception("Race not found with id: " + id);
-            }
 
             model.addAttribute("race", race);
             model.addAttribute("raceResults", race.getRaceResults());
@@ -112,20 +110,14 @@ public class StandingsController {
             return "update-driver-standings-page";
         } else {
             try {
-                for (RaceResult raceResult : race.getRaceResults()) {
+                for (RaceResult raceResult : race.getRaceResults())
                     driverStandingsService.updateDriverStanding(raceResult.getDriverStandings().getIdDS(), raceResult.getDriverStandings());
-                }
+                
                 teamStandingsService.updateTeamPositions();
                 return "redirect:/standings/driver/all";
             } catch (Exception e) {
-                model.addAttribute("msg", e.getMessage());
-                return "error-page";
+                return "redirect:/error";
             }
         }
-    }
-
-    @GetMapping("/error")  //localhost:8080/error
-    public String getError() {
-        return "error-page";
     }
 }

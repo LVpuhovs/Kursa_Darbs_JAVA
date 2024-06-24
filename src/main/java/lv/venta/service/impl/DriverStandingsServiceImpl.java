@@ -1,6 +1,5 @@
 package lv.venta.service.impl;
 
-import jakarta.transaction.Transactional;
 import lv.venta.model.*;
 import lv.venta.repo.IDriverRepo;
 import lv.venta.repo.IDriverStandingsRepo;
@@ -84,26 +83,15 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
        updateDriverPositions();
     }
 
-    @Override
-    @Transactional
-    public void updateDriverStanding(int id, DriverStandings updatedDriverStandings) throws Exception {
-        Optional<DriverStandings> optionalDriverStandings = Optional.of(getDriverStandingsById(id));
-
-        if (optionalDriverStandings.isPresent()) {
-            DriverStandings existingDriverStandings = optionalDriverStandings.get();
-
-
-            existingDriverStandings.getRaceResult().setPosition(updatedDriverStandings.getRaceResult().getPosition());
-            existingDriverStandings.setPointsPerRace(updatedDriverStandings.getPointsPerRace());
-
-            driverStandingsRepo.save(existingDriverStandings);
-
-
-
-        } else {
-            throw new IllegalArgumentException("Driver standings with ID " + id + " not found.");
-        }
-    }
+   @Override
+   public void updateDriverStanding(int id, DriverStandings updatedDriverStandings) throws Exception {
+   	DriverStandings existingDriverStandings = getDriverStandingsById(id);
+   	if(existingDriverStandings != null) {
+   		existingDriverStandings.getRaceResult().setPosition(updatedDriverStandings.getRaceResult().getPosition());
+           driverStandingsRepo.save(existingDriverStandings);
+   	} else 
+           throw new IllegalArgumentException("Driver standings with ID " + id + " not found.");
+   }
 
     @Override
     public void deleteDriverStanding(int id) throws Exception {
@@ -138,7 +126,6 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
                 standingsMap.put(driverId, standing);
             }
         }
-
         return new ArrayList<>(standingsMap.values());
 	}
 
@@ -154,6 +141,6 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
 
     @Override
     public Race getRaceById(int id) {
-        return raceRepo.findById(id).get();
+        return raceRepo.findById(id).orElse(null);
     }
 }

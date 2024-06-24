@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,12 +38,12 @@ public class Team{
     private Driver driver2;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private List<TeamStandings> teamStandings = new ArrayList<>();
-
+    private Collection<TeamStandings> teamStandings;
+    
     @Min(0)
     @Column(name = "TotalTeamPoints")
     private int totalTeamPoints;
-
+    
     @Min(0)
     @Column(name = "TeamTotalPosition")
     private int teamTotalPosition;

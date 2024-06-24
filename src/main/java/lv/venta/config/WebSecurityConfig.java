@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
                         .requestMatchers("/standings/all").permitAll()
                         .requestMatchers("/standings/driver/all").permitAll()
                         .requestMatchers("/standings/team/all").permitAll()
-                        .requestMatchers("/driver/create").hasAuthority("USER")
+                        .requestMatchers("/driver/create").hasAnyAuthority("USER", "ADMIN")
                         .requestMatchers("/driver/update/**").hasAuthority("ADMIN")
                         .requestMatchers("/driver/delete/**").hasAuthority("ADMIN")
                         .requestMatchers("/team/add").hasAuthority("ADMIN")
@@ -71,9 +71,13 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
                         .requestMatchers("/team/delete/**").hasAuthority("ADMIN")
                         .requestMatchers("/standings/all").permitAll()
                         .requestMatchers("/standings/driver/update/race/**").hasAuthority("ADMIN")
+                        .requestMatchers("/standings/team/update/race/**").hasAuthority("ADMIN")
+                        .requestMatchers("/standings/team/all").permitAll()
                         .requestMatchers("/h2-console/**").hasAuthority("ADMIN")
-                        .requestMatchers("/styles.css").permitAll()
-                        .requestMatchers("/driver/create.css").permitAll()
+                        .requestMatchers("styles.css").permitAll()
+                        .requestMatchers("driver/create.css").permitAll()
+                        .requestMatchers("/error").permitAll()
+
                 );
 
         http.formLogin(form -> form.permitAll());

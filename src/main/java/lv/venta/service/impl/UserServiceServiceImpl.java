@@ -19,14 +19,11 @@ public class UserServiceServiceImpl implements IUserService {
     public void save(MyUser user) {
         String plaintextPassword = user.getPassword();
 
-
-        if (plaintextPassword != null && (plaintextPassword.length() < 3 || plaintextPassword.length() > 20)) {
+        if (plaintextPassword != null && (plaintextPassword.length() < 3 || plaintextPassword.length() > 20)) 
             throw new IllegalArgumentException("Password must be between 3 and 20 characters long");
-        }
-
-            String encodedPassword = password.encode(plaintextPassword);
-            user.setPassword(encodedPassword);
-
+        
+        String encodedPassword = password.encode(plaintextPassword);
+        user.setPassword(encodedPassword);
         userRepo.save(user);
     }
 

@@ -34,7 +34,7 @@ public class MyAuthority{
     private Collection<MyUser> users = new ArrayList<>();
 
 
-    public void addAuthority(MyUser user) {
+    public void addUser(MyUser user) {
         if(!users.contains(user))
             users.add(user);
     }

@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Update Standings</title>
-    <link rel="stylesheet" type="text/css" href="/driver/create.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Drivers</title>
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <style>
         table {
@@ -14,24 +14,49 @@
             margin: 20px auto;
         }
 
+
         th {
             background-color: #000000;
-			color: white;
+            color: white;
             border: 1px solid #ddd;
             padding: 5px;
             text-align: left;
             font-size: 14px;
         }
 
+
         td {
             border: 1px solid #ddd;
             padding: 5px;
             font-size: 14px;
         }
+        a.table-link {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+        a.table-link:hover {
+            color: darkred;
+        }
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+		h1 {
+		    font-size: 68px;
+		    text-align: center;
+		    margin-top: 20px;
+		}
 
     </style>
+
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
@@ -39,7 +64,7 @@
                 <a class="nav-link" href="/home">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/driver/all">Drivers</a>
+                <a class="nav-link active" href="/driver/all">Drivers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/team/all">Teams</a>
@@ -53,25 +78,8 @@
         </ul>
     </div>
 </nav>
-<h1>Update Driver Positions</h1>
-<form th:action="@{/standings/driver/update/race/{id}(id=${id})}" method="post" th:object="${race}" >
-    <input type="hidden" name="id" th:value="${race.idR}">
-    <table>
-        <thead>
-        <tr>
-            <th>Driver</th>
-            <th>Position</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="raceResult, stat : ${raceResults}">
-            <td th:text="${raceResult.driver.name} + ' ' + ${raceResult.driver.surname} + ' ' + ${raceResult.driver.number}"></td>
-            <td><input type="number" th:field="*{raceResults[__${stat.index}__].position}" /></td>
-            <td th:if="${#fields.hasErrors('raceResults[__${stat.index}__].position')}" th:errors="*{raceResults[__${stat.index}__].position}">Position Error </td>
-        </tr>
-        </tbody>
-    </table>
-    <button type="submit">Update</button>
-</form>
+
+
+<h1 th:text="${title}"></h1>
 </body>
 </html>
