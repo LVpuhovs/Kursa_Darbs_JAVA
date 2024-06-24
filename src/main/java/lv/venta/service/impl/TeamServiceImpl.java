@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 @Service
 public class TeamServiceImpl implements ITeamService {
@@ -28,7 +27,7 @@ public class TeamServiceImpl implements ITeamService {
     @Override
     public Team getTeamById(int id) throws Exception {
     	if(id < 0) throw new Exception("Wrong Input - Id should be positive!");
-        return teamRepo.findById(id).get();
+        return teamRepo.findById(id).orElse(null);
     }
 
     @Override
