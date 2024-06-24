@@ -134,8 +134,8 @@ public class DriverStandingsServiceImpl implements IDriverStandingsService {
         List<Driver> drivers = (List<Driver>) driverRepo.findAll();
         drivers.sort((d1, d2) -> Integer.compare(d2.getTotalPoints(), d1.getTotalPoints()));
 
-        for(int i = 0; i < drivers.size(); i++)
-            drivers.get(i).setDriverTotalPosition(i + 1);
+        for(int i = 0; i < drivers.size(); i++) drivers.get(i).setDriverTotalPosition(i + 1);
+
         driverRepo.saveAll(drivers);
     }
 

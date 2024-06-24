@@ -69,9 +69,13 @@
             <td><input type="number" th:field="*{raceResults[__${stat.index}__].position}" /></td>
             <td th:if="${#fields.hasErrors('raceResults[__${stat.index}__].position')}" th:errors="*{raceResults[__${stat.index}__].position}">Position Error </td>
         </tr>
+
+        <tr>
+            <td colspan="2"><input type="submit" value="Update"/></td>
+        </tr>
         </tbody>
     </table>
-    <button type="submit">Update</button>
+
 </form>
 </body>
 </html>

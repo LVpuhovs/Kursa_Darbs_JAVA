@@ -51,9 +51,6 @@ public class Driver {
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<RaceResult> raceResults;
 
-    @Min(0)
-    @Column(name = "Wins")
-    private int wins;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<DriverStandings> driverStandings;
